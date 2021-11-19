@@ -4,7 +4,6 @@ import random
 import aiohttp
 import requests
 import asyncio
-import keep_alive
 import json
 import datetime
 
@@ -301,7 +300,5 @@ async def on_message(message):
 
 
 
-
-
-keep_alive.keep_alive()            
-bot.run("OTEwOTYwNDg3NzAzOTA0Mzg3.YZa-lg.TpvlL8fAK8tSDM6ohyE_o27YTvA")
+        
+bot.run("UR TOKEN")
