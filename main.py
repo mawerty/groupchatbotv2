@@ -12,7 +12,7 @@ bot = commands.Bot(command_prefix='!', self_bot=True)
 
 color = 3092790
 
-__version__ = 1.9
+
 
 languages = {
     'da'    : 'Danish, Denmark',
