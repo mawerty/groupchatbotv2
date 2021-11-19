@@ -6,7 +6,9 @@ import requests
 import asyncio
 import json
 import datetime
-
+import utils
+import base64
+import re
 
 bot = commands.Bot(command_prefix='!', self_bot=True)
 
@@ -71,13 +73,14 @@ locales = [
 
 @bot.event
 async def on_message_delete(message):
+    global snipe_message_id
     global snipe_message_content
     global snipe_message_author
-    global snipe_message_id
+    snipe_message_id = message.id
     snipe_message_content = message.content
     snipe_message_author = message.author.id
-    snipe_message_id = message.id
     await asyncio.sleep(60)
+
     if message.id == snipe_message_id:
         snipe_message_author = None
         snipe_message_content = None
@@ -88,10 +91,43 @@ async def on_message_delete(message):
 
 @bot.event
 async def on_message(message):
-        if message.content == '!nigrate':
-              embed = discord.Embed(title='nigrate', color = color, description=f"ur nigrate is {random.randint(1,100)}% u black monkey ")
-              embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/887809991971581962/898693499787046922/cat-kissing.gif")
-              await message.channel.send(embed=embed)
+
+
+        if message.content == '!nigrate' and message.author.id !=  761940434184044605:
+          embed = discord.Embed(title='nigrate', color = color, description=f"ur nigrate is {random.randint(1,100)}% u black monkey ")
+          embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/887809991971581962/898693499787046922/cat-kissing.gif")
+          await message.channel.send(embed=embed)
+          return
+
+
+        elif message.content == "!b64encode":
+          await message.channel.send("Message you want to encode?")
+          response = await bot.wait_for('message')
+          response2 = str(response.content)
+          string_bytes = response2.encode("ascii")
+          base64_bytes = base64.b64encode(string_bytes) 
+          base64_string = base64_bytes.decode("ascii") 
+          embed = discord.Embed(title=f"Encoded: {base64_string}", color=color)
+          await message.channel.send(embed=embed)
+
+        elif message.content == "!b64decode":
+          await message.channel.send("Message you want to decode?")
+          response = await bot.wait_for('message')
+          response2 = str(response.content)
+          string_bytes = response2.encode("ascii")
+          base64_bytes = base64.b64decode(string_bytes) 
+          base64_string = base64_bytes.decode("ascii") 
+          await message.channel.send(f'Decoded: {base64_string}')
+          embed = discord.Embed(title=f"Decoded: {base64_string}", color=color)
+          await message.channel.send(embed=embed)
+
+
+
+        elif message.content == '!nigrate' and message.author.id ==  761940434184044605:
+          embed = discord.Embed(title='nigrate', color = color, description=f"ur nigrate is 0% u white boy")
+          embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/887809991971581962/898693499787046922/cat-kissing.gif")
+          await message.channel.send(embed=embed)
+          return
 
 
         elif message.content == "!dog":
@@ -122,7 +158,8 @@ async def on_message(message):
                   await message.channel.send(embed=embed)
 
 
-        
+    
+
 
 
 
@@ -255,7 +292,7 @@ async def on_message(message):
                     await message.channel.send(embed=embed)  
 
         elif message.content == '!help':
-              embed = discord.Embed(title='List', color = color, description=f"**!ping** - sends the bot latency **!tokeninfo** - checks a tokens info **!ipinfo** - checks the ip \n**!guessinggame** - guessing game (if someone interrupts it breaks) \n**!rat** - sends ghurb \n**!cat** - sends a cat pic \n**!dog** - sends a dog pic \n**!nigrate** - sends ur nigrate u blackie \n**!hentai** - sends some hentai \n**!sex** - sends porn \n**!boobs** - <3 \n**!av** - sends ur av (ur only) \n**!snipe** - sends the last deleted message \n\n credits to xyte only")
+              embed = discord.Embed(title='List', color = color, description=f"**!b64encode/decode** - encodes/decodes something in base64 \n**!ping** - sends the bot latency \n **!tokeninfo** - checks a tokens info \n**!ipinfo** - checks the ip \n**!guessinggame** - guessing game (if someone interrupts it breaks) \n**!rat** - sends ghurb \n**!cat** - sends a cat pic \n**!dog** - sends a dog pic \n**!nigrate** - sends ur nigrate u blackie \n**!hentai** - sends some hentai \n**!sex** - sends porn \n**!boobs** - <3 \n**!av** - sends ur av (ur only) \n**!snipe** - sends the last deleted message \n\n credits to xyte only")
               embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/887809991971581962/898693499787046922/cat-kissing.gif")
               await message.channel.send(embed=embed)
 
@@ -278,6 +315,18 @@ async def on_message(message):
               ipinfo5 = ipinfo4.replace('}', "")
               await message.channel.send(f"""```{ipinfo5}```""")
               
+
+        elif message.content == '!snipe':
+            if snipe_message_content==None:
+                await message.channel.send("NOTHING TO SNIPE U FAT LITTLE MONKEY")
+            else:
+                embed = discord.Embed(description=f"{snipe_message_content}", color=color)
+                embed.set_author(name= f"Snipe")
+                await message.channel.send(embed=embed)
+                await message.channel.send(f"Sent by: <@{snipe_message_author}>")
+
+
+          
         elif message.content == "!guessinggame":
                 await message.channel.send('Guess a number from 1 to 5!')
                 number = random.randint(0, 5)
@@ -297,5 +346,7 @@ async def on_message(message):
 
 
 
-        
-bot.run("UR TOKEN")
+
+
+     
+bot.run("")
