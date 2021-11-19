@@ -11,9 +11,7 @@ open cmd in the path you have the extracted gcbot in and run "python get-pip.py"
 
 run pip install -r requirements.txt
 
-edit the code with anything, scroll down until you find the token variable. Replace its content with your own USER account, preferably make a alt and get its token, if you dont 
-
-know how theres videos of that on youtube.
+edit the code with anything, scroll down until you find the token variable. Replace its content with your own USER account, preferably make a alt and get its token, if you dont know how theres videos of that on youtube.
 
 open the python file
 
