@@ -14,4 +14,4 @@ and the bot should run, to use it add it as a friend and add it to a group chat
 
 done
 
-#contact: xyte#1337 on cord uwu
+## contact: xyte#1337 on cord uwu
