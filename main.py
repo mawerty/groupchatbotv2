@@ -71,16 +71,13 @@ locales = [
 
 @bot.event
 async def on_message_delete(message):
-
     global snipe_message_content
     global snipe_message_author
     global snipe_message_id
-
     snipe_message_content = message.content
     snipe_message_author = message.author.id
     snipe_message_id = message.id
     await asyncio.sleep(60)
-
     if message.id == snipe_message_id:
         snipe_message_author = None
         snipe_message_content = None
