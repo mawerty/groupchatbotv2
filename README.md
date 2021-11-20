@@ -7,9 +7,9 @@ poorly coded bot that works on group chats, not for python noobs :)
 usage:
 download python, in installation check the install to path box
 
-open cmd in the path you have the extracted gcbot in and run "python get-pip.py"
+open cmd and run python get-pip.py
+open cmd in the path you have the extracted gcbot in and run "pip install -r requirements.txt"
 
-run pip install -r requirements.txt
 
 edit the code with anything, scroll down until you find the token variable. Replace its content with your own USER account, preferably make a alt and get its token, if you dont know how theres videos of that on youtube.
 
