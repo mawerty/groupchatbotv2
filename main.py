@@ -6,9 +6,10 @@ import requests
 import asyncio
 import json
 import datetime
-import utils
 import base64
-import re
+from googletrans import Translator
+
+translator = Translator()
 
 bot = commands.Bot(command_prefix='!', self_bot=True)
 
@@ -73,12 +74,14 @@ locales = [
 
 @bot.event
 async def on_message_delete(message):
-    global snipe_message_id
+
     global snipe_message_content
     global snipe_message_author
-    snipe_message_id = message.id
+    global snipe_message_id
+
     snipe_message_content = message.content
     snipe_message_author = message.author.id
+    snipe_message_id = message.id
     await asyncio.sleep(60)
 
     if message.id == snipe_message_id:
@@ -93,11 +96,26 @@ async def on_message_delete(message):
 async def on_message(message):
 
 
+         
         if message.content == '!nigrate' and message.author.id !=  761940434184044605:
           embed = discord.Embed(title='nigrate', color = color, description=f"ur nigrate is {random.randint(1,100)}% u black monkey ")
           embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/887809991971581962/898693499787046922/cat-kissing.gif")
           await message.channel.send(embed=embed)
           return
+
+        elif message.content == '!help':
+               embed = discord.Embed(title='List', color = color, description=f"**!translate** - translates text to english \n**!pussy** - sends a not cat :( \n**!b64encode/decode** - encodes/decodes something in base64 \n**!ping** - sends the bot latency \n **!tokeninfo** - checks a tokens info \n**!ipinfo** - checks an ip \n**!guessinggame** - guessing game (if someone interrupts it breaks) \n**!racc** - sends a raccoon pic \n**!cat** - sends a cat pic \n**!dog** - sends a dog pic \n**!nigrate** - sends ur nigrate u blackie \n**!hentai** - sends some hentai \n**!sex** - sends porn \n**!boobs** - <3 \n**!av** - sends ur avatar (only send's your avatar) \n**!snipe** - sends the last deleted message \n**!meme** - sends a shitty reddit meme lol \n**!pingsite** - checks if a website is up \n**!test** - checks to see if the bot is running \n\n credits to xyte only some credits to ghurb for fixing ur shitty bot mert")
+               embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/887809991971581962/898693499787046922/cat-kissing.gif")
+               await message.channel.send(embed=embed)
+
+        elif message.content == "floyd":
+          await message.channel.send("i cant breathe")
+          await message.channel.send("https://i.imgur.com/mn3EslL.png")
+
+
+        elif message.content == "!test":
+          await message.channel.send("bot is working!")
+
 
 
         elif message.content == "!b64encode":
@@ -143,7 +161,7 @@ async def on_message(message):
              async with aiohttp.ClientSession() as session:
               request = await session.get('https://some-random-api.ml/img/cat') 
               dogjson = await request.json()
-              embed = discord.Embed(title="meow", color=color)
+              embed = discord.Embed(title="nice pussy <3", color=color)
               embed.set_image(url=dogjson['link'])
               await message.channel.send(embed=embed)
 
@@ -158,16 +176,11 @@ async def on_message(message):
                   await message.channel.send(embed=embed)
 
 
-    
-
-
-
-
-        elif message.content == "!rat":
+        elif message.content == "!racc":
              async with aiohttp.ClientSession() as session:
               request = await session.get('https://some-random-api.ml/img/raccoon') 
               dogjson = await request.json()
-              embed = discord.Embed(title="ghurbs a rat", color=color)
+              embed = discord.Embed(title="<3", color=color)
               embed.set_image(url=dogjson['link'])
               await message.channel.send(embed=embed)
 
@@ -179,6 +192,18 @@ async def on_message(message):
             embed.set_author(name="hentai",icon_url=message.author.avatar_url)
             embed.set_image(url=res["url"])
             await message.channel.send(embed=embed)
+
+        elif message.content == "!translate":
+          try:
+            await message.channel.send("Message? (It automatically detects the language of your message!)")
+            content = await bot.wait_for('message')
+            contenttxt = str(content.content)     
+            translated = translator.translate(contenttxt)
+            await message.channel.send(translated.text)
+          except:
+            pass
+
+
 
 
         elif message.content == "!boobs":
@@ -255,7 +280,7 @@ async def on_message(message):
                    em.add_field(name=field['name'], value=field['value'], inline=False)
                    em.set_thumbnail(url=f"https://cdn.discordapp.com/avatars/{user_id}/{avatar_id}")
            return await message.channel.send(embed=em)
-
+#https://nekos.life/api/v2/img/pussy
 
         elif message.content == "!sex":
           anal = requests.get("https://nekos.life/api/v2/img/anal")
@@ -266,38 +291,34 @@ async def on_message(message):
           await message.channel.send(embed=embed)
 
 
+        elif message.content == "!pussy":
+          anal = requests.get("https://nekos.life/api/v2/img/pussy")
+          res = anal.json()
+          embed = discord.Embed(color=color)
+          embed.set_author(name="that isnt a cat bro",icon_url=message.author.avatar_url)
+          embed.set_image(url=res["url"])
+          await message.channel.send(embed=embed)
+
+
         elif message.content == "!av":
-          await message.channel.send('User ID?')
-          id = await bot.wait_for('message')
-          user = str(id.content)
-          await message.channel.send("in progress")
+          await message.channel.send(message.author.avatar_url)
 
         elif message.content == "!pingsite":
           await message.channel.send('Website??')
           website = await bot.wait_for('message')
-          url = str(website.content)
-          if url is None: 
-              pass
-          else:
-              try:
-                  r = requests.get(url)
-                  if r == 404:
-                    embed = discord.Embed(title=f'{url}', color = color, description=f"Site is down")
-                    await message.channel.send(embed=embed)
-              except:
-                    embed = discord.Embed(title=f'{url}', color = color, description=f"Site is up")
-                    await message.channel.send(embed=embed)  
-              else:
-                    embed = discord.Embed(title=f'{url}', color = color, description=f"Invalid site")
-                    await message.channel.send(embed=embed)  
+          site = str(website.content)
 
-        elif message.content == '!help':
-              embed = discord.Embed(title='List', color = color, description=f"**!b64encode/decode** - encodes/decodes something in base64 \n**!ping** - sends the bot latency \n **!tokeninfo** - checks a tokens info \n**!ipinfo** - checks the ip \n**!guessinggame** - guessing game (if someone interrupts it breaks) \n**!rat** - sends ghurb \n**!cat** - sends a cat pic \n**!dog** - sends a dog pic \n**!nigrate** - sends ur nigrate u blackie \n**!hentai** - sends some hentai \n**!sex** - sends porn \n**!boobs** - <3 \n**!av** - sends ur av (ur only) \n**!snipe** - sends the last deleted message \n\n credits to xyte only")
-              embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/887809991971581962/898693499787046922/cat-kissing.gif")
-              await message.channel.send(embed=embed)
 
-        elif message.content == "!ping":
-          await message.channel.send(f'Latency: {bot.latency} seconds.')
+          r = requests.get("https://" + site)
+          try:
+            if r.status_code == 404:
+                await message.channel.send("Site is down")
+            if r.status_code == 200:
+                await message.channel.send("Site is up")
+          except:
+            await message.channel.send("Site is down")
+
+
 
 
         elif message.content == "!ipinfo":
@@ -309,7 +330,7 @@ async def on_message(message):
 
               ipjson = await request.json()
               json_formatted_str = json.dumps(ipjson, indent=2)
-              ipinfo2 = json_formatted_str.replace(":", " ")
+              ipinfo2 = json_formatted_str.replace(":", "")
               ipinfo3 = ipinfo2.replace('"', "")
               ipinfo4 = ipinfo3.replace('{', "")
               ipinfo5 = ipinfo4.replace('}', "")
@@ -329,8 +350,8 @@ async def on_message(message):
           
         elif message.content == "!guessinggame":
                 await message.channel.send('Guess a number from 1 to 5!')
-                number = random.randint(0, 5)
-                for i in range(0, 5):
+                number = random.randint(1, 5)
+                for i in range(1, 5):
                     response = await bot.wait_for('message')
                     guess = int(response.content)
                     if guess > number:
@@ -348,5 +369,5 @@ async def on_message(message):
 
 
 
-     
+          
 bot.run("")
