@@ -1,5 +1,5 @@
 # gcbotv2
-poorly coded bot that works on group chats, not for python noobs :)
+good good bot !!
 
 # why? cuz discord broke shit and my old 1 no longer works
 
