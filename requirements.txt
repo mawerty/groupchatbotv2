@@ -3,3 +3,4 @@ aiohttp
 requests
 json
 asyncio
+base64
