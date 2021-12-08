@@ -10,7 +10,7 @@ import base64
 from googletrans import Translator
 from itertools import cycle
 
-token = ""
+token = "ur tuc"
 
 
 
@@ -105,14 +105,13 @@ async def on_message(message):
 **!snipe** - sends the last deleted message 
 **!translate** - translates text to english 
 **!b64encode/decode** - encodes/decodes something in base64 
+**!botinvite** - sends a invite to a bot
 
 **!tokenfuck** - fucks a token
 **!tokeninfo** - checks a tokens info 
+**!ipinfo** - checks an ip 
 **!spamwebhook** - spams a webhook
 **!deletewebhook** - deletes a webhook 
-
-**!ipinfo** - checks an ip 
-**!pingsite** - checks if a website is up 
 
 **!banner** - steals anyones banner
 **!av** - steals anyones avatar
@@ -139,6 +138,11 @@ async def on_message(message):
         elif message.content == "!test":
           await message.channel.send("bot is working!")
 
+        elif message.content == "!botinvite":
+          await message.channel.send('Bot id? ')
+          response = await bot.wait_for('message')
+          id = response.content
+          await message.channel.send(f'https://discord.com/api/oauth2/authorize?client_id={id}&permissions=0&scope=bot')
 
 
         elif message.content == '!deletewebhook':
@@ -278,7 +282,7 @@ async def on_message(message):
                   await message.channel.send(embed=embed)
 
 
-        elif message.content == "!racc":
+        elif message.content == "!racc" or message.content == "!rat":
              async with aiohttp.ClientSession() as session:
               request = await session.get('https://some-random-api.ml/img/raccoon') 
               dogjson = await request.json()
@@ -460,5 +464,5 @@ async def on_message(message):
 
 
 
-        
+       
 bot.run(token)
