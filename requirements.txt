@@ -4,3 +4,5 @@ requests
 json
 asyncio
 base64
+itertools
+googletrans
