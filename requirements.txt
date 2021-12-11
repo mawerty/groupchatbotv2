@@ -2,6 +2,5 @@ discord.py
 aiohttp
 requests
 asyncio
-base64
 itertools
 googletrans
