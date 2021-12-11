@@ -8,7 +8,6 @@ import json
 import datetime
 import base64
 from googletrans import Translator
-import keep_alive
 from itertools import cycle
 
 
