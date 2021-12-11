@@ -1,7 +1,6 @@
 discord.py
 aiohttp
 requests
-json
 asyncio
 base64
 itertools
