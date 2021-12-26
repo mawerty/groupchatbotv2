@@ -12,7 +12,7 @@ from itertools import cycle
 import io
 import linecache
 
-token = "ODcyNTM1OTg1MjgyNTAyNzA2.Ybdwvw.8qCrgaE6uw6hUxSgGghgS5vvMCM"
+token = ""
 
 
 
