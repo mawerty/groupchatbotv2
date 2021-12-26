@@ -10,88 +10,93 @@ import base64
 import keep_alive
 from itertools import cycle
 import io
+import linecache
 
-token = ""
+token = "ODcyNTM1OTg1MjgyNTAyNzA2.Ybdwvw.8qCrgaE6uw6hUxSgGghgS5vvMCM"
+
 
 
 bot = commands.Bot(command_prefix='!', self_bot=True)
 
 color = 3092790
 
-languages = {
-    'da'    : 'Danish, Denmark',
-    'de'    : 'German, Germany',
-    'en-GB' : 'English, United Kingdom',
-    'en-US' : 'English, United States',
-    'es-ES' : 'Spanish, Spain',
-    'fr'    : 'French, France',
-    'hr'    : 'Croatian, Croatia',
-    'lt'    : 'Lithuanian, Lithuania',
-    'hu'    : 'Hungarian, Hungary',
-    'nl'    : 'Dutch, Netherlands',
-    'no'    : 'Norwegian, Norway',
-    'pl'    : 'Polish, Poland',
-    'pt-BR' : 'Portuguese, Brazilian, Brazil',
-    'ro'    : 'Romanian, Romania',
-    'fi'    : 'Finnish, Finland',
-    'sv-SE' : 'Swedish, Sweden',
-    'vi'    : 'Vietnamese, Vietnam',
-    'tr'    : 'Turkish, Turkey',
-    'cs'    : 'Czech, Czechia, Czech Republic',
-    'el'    : 'Greek, Greece',
-    'bg'    : 'Bulgarian, Bulgaria',
-    'ru'    : 'Russian, Russia',
-    'uk'    : 'Ukranian, Ukraine',
-    'th'    : 'Thai, Thailand',
-    'zh-CN' : 'Chinese, China',
-    'ja'    : 'Japanese',
-    'zh-TW' : 'Chinese, Taiwan',
-    'ko'    : 'Korean, Korea'
-}
 
-cc_digits = {
-    'american express': '3',
-    'visa': '4',
-    'mastercard': '5'
-}
-
-locales = [
-    "da", "de",
-    "en-GB", "en-US",
-    "es-ES", "fr",
-    "hr", "it",
-    "lt", "hu",
-    "nl", "no",
-    "pl", "pt-BR",
-    "ro", "fi",
-    "sv-SE", "vi",
-    "tr", "cs",
-    "el", "bg",
-    "ru", "uk",
-    "th", "zh-CN",
-    "ja", "zh-TW",
-    "ko"
-]
 
 @bot.event
 async def on_message_delete(message):
+
     global snipe_message_content
     global snipe_message_author
     global snipe_message_id
+
     snipe_message_content = message.content
     snipe_message_author = message.author.id
     snipe_message_id = message.id
     await asyncio.sleep(60)
+
     if message.id == snipe_message_id:
         snipe_message_author = None
         snipe_message_content = None
         snipe_message_id = None
 
+languages = {
+              'da'    : 'Danish, Denmark',
+              'de'    : 'German, Germany',
+              'en-GB' : 'English, United Kingdom',
+              'en-US' : 'English, United States',
+              'es-ES' : 'Spanish, Spain',
+              'fr'    : 'French, France',
+              'hr'    : 'Croatian, Croatia',
+              'lt'    : 'Lithuanian, Lithuania',
+              'hu'    : 'Hungarian, Hungary',
+              'nl'    : 'Dutch, Netherlands',
+              'no'    : 'Norwegian, Norway',
+              'pl'    : 'Polish, Poland',
+              'pt-BR' : 'Portuguese, Brazilian, Brazil',
+              'ro'    : 'Romanian, Romania',
+              'fi'    : 'Finnish, Finland',
+              'sv-SE' : 'Swedish, Sweden',
+              'vi'    : 'Vietnamese, Vietnam',
+              'tr'    : 'Turkish, Turkey',
+              'cs'    : 'Czech, Czechia, Czech Republic',
+              'el'    : 'Greek, Greece',
+              'bg'    : 'Bulgarian, Bulgaria',
+              'ru'    : 'Russian, Russia',
+              'uk'    : 'Ukranian, Ukraine',
+              'th'    : 'Thai, Thailand',
+              'zh-CN' : 'Chinese, China',
+              'ja'    : 'Japanese',
+              'zh-TW' : 'Chinese, Taiwan',
+              'ko'    : 'Korean, Korea'
+          }
 
+
+locales = [
+              "da", "de",
+              "en-GB", "en-US",
+              "es-ES", "fr",
+              "hr", "it",
+              "lt", "hu",
+              "nl", "no",
+              "pl", "pt-BR",
+              "ro", "fi",
+              "sv-SE", "vi",
+              "tr", "cs",
+              "el", "bg",
+              "ru", "uk",
+              "th", "zh-CN",
+              "ja", "zh-TW",
+              "ko"
+          ]
 
 
 @bot.event
 async def on_message(message):
+        
+        #blacklist
+        #if message.author.id == 919422362640842832:
+          #pass
+          
         if message.content == '!help':
           embed = discord.Embed(title='List', color = color, description=f"""
 
@@ -116,14 +121,29 @@ async def on_message(message):
 **!dog** - sends a dog pic 
 **!hentai** - you already know what it does
 
+**!8ball** - 8ball
 **!poll** - creates a poll
 **!guessinggame** - guessing game (if someone interrupts it breaks)
 **!nigrate** - sends ur nigrate u blackie 
-
 """)  
+
+        elif message.content == "!randomserver":
+          server = linecache.getline('servers.txt', random.randint(1, 350))
+          await message.channel.send(server)
+
+
           embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/887809991971581962/898693499787046922/cat-kissing.gif")
           await message.channel.send(embed=embed)
 
+        elif message.content == "4ren":
+          await message.channel.send("u mean the retard monkey :clown: :clown: :clown: https://media.discordapp.net/attachments/921103626372526090/921151699735957594/unknown.png")
+
+        elif message.content == "floyd":
+          await message.channel.send("i cant breathe")
+          await message.channel.send("https://i.imgur.com/mn3EslL.png")
+
+        elif message.content == "!furry":
+          await message.channel.send("loxi is furry")
 
         elif message.content == "!poll":
           await message.channel.send("Question?")
@@ -160,6 +180,7 @@ async def on_message(message):
               em = discord.Embed()
               em.set_image(url=res['url'])
               await message.channel.send(embed=em)
+
 
 
         elif message.content == "!botinvite":
@@ -205,6 +226,7 @@ async def on_message(message):
           await message.channel.send(embed=embed)
           return
 
+
         elif message.content == "!dog":
              async with aiohttp.ClientSession() as session:
               request = await session.get('https://some-random-api.ml/img/dog') 
@@ -214,60 +236,6 @@ async def on_message(message):
               await message.channel.send(embed=embed)
 
         elif message.content == '!tokenfuck':
-          languages = {
-              'da'    : 'Danish, Denmark',
-              'de'    : 'German, Germany',
-              'en-GB' : 'English, United Kingdom',
-              'en-US' : 'English, United States',
-              'es-ES' : 'Spanish, Spain',
-              'fr'    : 'French, France',
-              'hr'    : 'Croatian, Croatia',
-              'lt'    : 'Lithuanian, Lithuania',
-              'hu'    : 'Hungarian, Hungary',
-              'nl'    : 'Dutch, Netherlands',
-              'no'    : 'Norwegian, Norway',
-              'pl'    : 'Polish, Poland',
-              'pt-BR' : 'Portuguese, Brazilian, Brazil',
-              'ro'    : 'Romanian, Romania',
-              'fi'    : 'Finnish, Finland',
-              'sv-SE' : 'Swedish, Sweden',
-              'vi'    : 'Vietnamese, Vietnam',
-              'tr'    : 'Turkish, Turkey',
-              'cs'    : 'Czech, Czechia, Czech Republic',
-              'el'    : 'Greek, Greece',
-              'bg'    : 'Bulgarian, Bulgaria',
-              'ru'    : 'Russian, Russia',
-              'uk'    : 'Ukranian, Ukraine',
-              'th'    : 'Thai, Thailand',
-              'zh-CN' : 'Chinese, China',
-              'ja'    : 'Japanese',
-              'zh-TW' : 'Chinese, Taiwan',
-              'ko'    : 'Korean, Korea'
-          }
-
-          cc_digits = {
-              'american express': '3',
-              'visa': '4',
-              'mastercard': '5'
-          }
-
-          locales = [
-              "da", "de",
-              "en-GB", "en-US",
-              "es-ES", "fr",
-              "hr", "it",
-              "lt", "hu",
-              "nl", "no",
-              "pl", "pt-BR",
-              "ro", "fi",
-              "sv-SE", "vi",
-              "tr", "cs",
-              "el", "bg",
-              "ru", "uk",
-              "th", "zh-CN",
-              "ja", "zh-TW",
-              "ko"
-          ]
           await message.channel.send("Token?")
           response = await bot.wait_for('message')
           if response.author.id == bot.user.id:
@@ -336,7 +304,8 @@ async def on_message(message):
                           pass
                       else:
                           break
-
+          await asyncio.sleep(2)
+          
         elif message.content == "!spamwebhook":
           await message.channel.send("Webhook? ")
           webhook = await bot.wait_for('message')
@@ -473,9 +442,12 @@ async def on_message(message):
           await message.channel.send("Link?")
           response = await bot.wait_for('message')
           link = response.content
-          data = requests.get(f"https://bypass.bot.nu/bypass2?url={link}", headers=headers)
-          link = data.json()["destination"]
-          await message.channel.send(f"Link: {link}")
+          if link == "Link?":
+            pass
+          else:
+            data = requests.get(f"https://bypass.bot.nu/bypass2?url={link}", headers=headers)
+            link = data.json()["destination"]
+            await message.channel.send(f"Link: {link}")
 
         elif message.content == "!av":
           await message.channel.send('User?')
@@ -513,18 +485,38 @@ async def on_message(message):
 
 
         elif message.content == "!ipinfo":
-            await message.channel.send('Enter the ip.')
+            await message.channel.send('Ip?')
             ip = await bot.wait_for('message')
             ip2 = str(ip.content)
-            async with aiohttp.ClientSession() as session:
-              request = await session.get(f'https://ipapi.co/{ip2}/json') 
+            if ip2 == "Link?":
+              pass
+            else:
+              async with aiohttp.ClientSession() as session:
+                request = await session.get(f'https://ipapi.co/{ip2}/json') 
 
-              ipjson = await request.json()
-              json_formatted_str = json.dumps(ipjson, indent=2)
-              ipinfo = json_formatted_str.strip('{').strip('}').replace('"', "⁣").replace(',', '⁣').replace('  ⁣', '⁣')
+                ipjson = await request.json()
+                json_formatted_str = json.dumps(ipjson, indent=2)
+                ipinfo = json_formatted_str.strip('{').strip('}').replace('"', "⁣").replace(',', '⁣').replace('  ⁣', '⁣')
 
-              await message.channel.send(f"""```{ipinfo}```""")
+                await message.channel.send(f"""```{ipinfo}```""")
               
+        elif message.content == "!8ball":
+          await message.channel.send('Question?')
+          question = await bot.wait_for('message')
+          if question.author.id == bot.user.id:
+            pass
+          else:
+            q = question.content
+            responses = ['yes',
+                    'no',
+                    'maybey',
+                    'sure']
+            response = random.choice(responses)
+            lol = random.randint(1, 30)
+            if lol == 7:
+              response = "i put my coomer in ur moder"
+            embed=discord.Embed(title=f"Question: {q}\nAnswer: {response} ", color=color)
+            await message.channel.send(embed=embed)      
 
         elif message.content == '!snipe':
             if snipe_message_content==None:
@@ -556,5 +548,8 @@ async def on_message(message):
 
 
 
-       
+
+
+
+keep_alive.keep_alive()            
 bot.run(token)
