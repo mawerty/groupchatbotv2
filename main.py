@@ -7,18 +7,14 @@ import asyncio
 import json
 from datetime import datetime
 import base64
+import keep_alive
 from itertools import cycle
-import io
 import linecache
+import time
 
 token = ""
-
-
-
 bot = commands.Bot(command_prefix='!', self_bot=True)
-
 color = 3092790
-
 
 
 languages = {
@@ -130,6 +126,18 @@ async def on_message(message):
           await message.channel.send(server)
 
 
+
+
+        elif message.content == "4ren":
+          await message.channel.send("u mean the retard monkey :clown: :clown: :clown: https://media.discordapp.net/attachments/921103626372526090/921151699735957594/unknown.png")
+
+        elif message.content == "floyd":
+          await message.channel.send("i cant breathe")
+          await message.channel.send("https://i.imgur.com/mn3EslL.png")
+
+        elif message.content == "!furry":
+          await message.channel.send("loxi is furry")
+
         elif message.content == "!poll":
           await message.channel.send("Question?")
           response = await bot.wait_for('message')
@@ -152,19 +160,16 @@ async def on_message(message):
             search2 = search.replace("@", "%40")
             await message.channel.send(f"<https://intelx.io/?s={search2}>")
           
+
         elif message.content == "!hentai":
-          r = requests.get("https://nekos.life/api/v2/img/Random_hentai_gif")
-          res = r.json()
-          try:
-              async with aiohttp.ClientSession() as session:
-                  async with session.get(res['url']) as resp:
-                      image = await resp.read()
-              with io.BytesIO(image) as file:
-                  await message.channel.send(file=discord.File(file, f"exeter_hentai.gif"))
-          except:
-              em = discord.Embed()
-              em.set_image(url=res['url'])
-              await message.channel.send(embed=em)
+          request = requests.get(f'https://nekobot.xyz/api/image?type=hass')
+          data = request.json()
+          link = data['message']
+          embed = discord.Embed(color=color, title="loading... if the image doesn't show it got blocked!")
+          firstembed = await message.channel.send(embed=embed)
+          secondembed = discord.Embed(color=color, title="hentiea")
+          secondembed.set_image(url=link)
+          await firstembed.edit(embed=secondembed)
 
 
 
@@ -403,7 +408,6 @@ async def on_message(message):
           response = await bot.wait_for('message')
           response2 = response.content
           user = await bot.fetch_user(response2)
-          time = user.created_at.timestamp()
           timestamp = datetime.fromtimestamp(time)
           embed = discord.Embed(description=f"""
 **Username:** {user.name}#{user.discriminator}
@@ -533,5 +537,6 @@ async def on_message(message):
 
 
 
-          
+
+       
 bot.run(token)
