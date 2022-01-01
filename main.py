@@ -7,7 +7,6 @@ import asyncio
 import json
 from datetime import datetime
 import base64
-import keep_alive
 from itertools import cycle
 import linecache
 import time
@@ -84,9 +83,11 @@ async def on_message_delete(message):
 @bot.event
 async def on_message(message):
         
+        
         #blacklist
         #if message.author.id == 919422362640842832:
           #pass
+        
           
         if message.content == '!help':
           embed = discord.Embed(title='List', color = color, description=f"""
@@ -126,6 +127,12 @@ async def on_message(message):
           await message.channel.send(server)
 
 
+        elif message.content == "!cf":
+          ht = random.randint(1,2)
+          if ht == 1:
+            await message.channel.send("Heads!")
+          else:
+            await message.channel.send("Tails!")
 
 
         elif message.content == "4ren":
@@ -408,7 +415,8 @@ async def on_message(message):
           response = await bot.wait_for('message')
           response2 = response.content
           user = await bot.fetch_user(response2)
-          timestamp = datetime.fromtimestamp(time)
+          time1 = user.created_at.timestamp()
+          timestamp = datetime.fromtimestamp(time1)
           embed = discord.Embed(description=f"""
 **Username:** {user.name}#{user.discriminator}
 **Id:** {response2}
@@ -537,6 +545,5 @@ async def on_message(message):
 
 
 
-
-       
+        
 bot.run(token)
