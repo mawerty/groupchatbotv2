@@ -10,6 +10,7 @@ import base64
 from itertools import cycle
 import linecache
 import time
+import os
 
 token = ""
 bot = commands.Bot(command_prefix='!', self_bot=True)
@@ -114,10 +115,11 @@ async def on_message(message):
 **!hentai** - you already know what it does
 
 **!8ball** - 8ball
+**!cf** - flips a coin
 **!poll** - creates a poll
 **!guessinggame** - guessing game (if someone interrupts it breaks)
 **!nigrate** - sends ur nigrate u blackie 
-""")  
+`developed by xyte and ghurb <33`""")  
           embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/887809991971581962/898693499787046922/cat-kissing.gif")
           await message.channel.send(embed=embed)
 
@@ -157,6 +159,7 @@ async def on_message(message):
             await message.add_reaction('✅')
             await message.add_reaction('❎')
 
+
         elif message.content == "!leak":
           await message.channel.send("Query?")
           query = await bot.wait_for('message')
@@ -186,7 +189,34 @@ async def on_message(message):
           id = response.content
           await message.channel.send(f'https://discord.com/api/oauth2/authorize?client_id={id}&permissions=0&scope=bot')
 
+        elif message.content == "cyphed":
+          await  message.channel.send("cyphed is pro haxxor.")
+          
+        elif message.content == "ghurb":
+          await  message.channel.send("you mean the sexy hacker man himself :sunglasses:")
 
+        elif message.content == "baki":
+          await  message.channel.send("https://doxbin.com/upload/Bakiryanwaltondox BakiK")
+
+        elif message.content == "kriss":
+          await  message.channel.send("you mean the black nigger with a gambling addiction")
+
+          
+        elif message.content == "cyphed":
+          await  message.channel.send("cyphed is pro haxxor.")
+
+
+        elif message.content == "risk":
+          await  message.channel.send("you mean the black nigger with fucked teeth british")
+
+
+        elif message.content == "bana":
+          await  message.channel.send("you mean the black african monkey with no water")
+
+        elif message.content == "xyte":
+          await  message.channel.send("you mean the nigger that allways plays roblox and is black and gay")
+          
+                      
         elif message.content == '!deletewebhook':
           await message.channel.send('Webhook? ')
           response = await bot.wait_for('message')
@@ -536,6 +566,7 @@ async def on_message(message):
                         await message.channel.send('Bigger!')
                     else:
                         await message.channel.send('You guessed it!')
+
 
 
 
