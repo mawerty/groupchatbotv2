@@ -137,16 +137,6 @@ async def on_message(message):
             await message.channel.send("Tails!")
 
 
-        elif message.content == "4ren":
-          await message.channel.send("u mean the retard monkey :clown: :clown: :clown: https://media.discordapp.net/attachments/921103626372526090/921151699735957594/unknown.png")
-
-        elif message.content == "floyd":
-          await message.channel.send("i cant breathe")
-          await message.channel.send("https://i.imgur.com/mn3EslL.png")
-
-        elif message.content == "!furry":
-          await message.channel.send("loxi is furry")
-
         elif message.content == "!poll":
           await message.channel.send("Question?")
           response = await bot.wait_for('message')
@@ -189,33 +179,6 @@ async def on_message(message):
           id = response.content
           await message.channel.send(f'https://discord.com/api/oauth2/authorize?client_id={id}&permissions=0&scope=bot')
 
-        elif message.content == "cyphed":
-          await  message.channel.send("cyphed is pro haxxor.")
-          
-        elif message.content == "ghurb":
-          await  message.channel.send("you mean the sexy hacker man himself :sunglasses:")
-
-        elif message.content == "baki":
-          await  message.channel.send("https://doxbin.com/upload/Bakiryanwaltondox BakiK")
-
-        elif message.content == "kriss":
-          await  message.channel.send("you mean the black nigger with a gambling addiction")
-
-          
-        elif message.content == "cyphed":
-          await  message.channel.send("cyphed is pro haxxor.")
-
-
-        elif message.content == "risk":
-          await  message.channel.send("you mean the black nigger with fucked teeth british")
-
-
-        elif message.content == "bana":
-          await  message.channel.send("you mean the black african monkey with no water")
-
-        elif message.content == "xyte":
-          await  message.channel.send("you mean the nigger that allways plays roblox and is black and gay")
-          
                       
         elif message.content == '!deletewebhook':
           await message.channel.send('Webhook? ')
@@ -576,5 +539,5 @@ async def on_message(message):
 
 
 
-        
+          
 bot.run(token)
