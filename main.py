@@ -10,7 +10,7 @@ import base64
 from itertools import cycle
 import linecache
 
-
+OTQwOTUxNDM0Nzc2Njg2Njgy.YgVEVw.lMnKlbrot5wcgk5Fli9-M7Zg02Y
 token = ""
 bot = commands.Bot(command_prefix='!', self_bot=True)
 color = 3092790
