@@ -9,8 +9,7 @@ from datetime import datetime
 import base64
 from itertools import cycle
 import linecache
-import time
-import os
+
 
 token = ""
 bot = commands.Bot(command_prefix='!', self_bot=True)
@@ -91,37 +90,37 @@ async def on_message(message):
         
           
         if message.content == '!help':
-          embed = discord.Embed(title='List', color = color, description=f"""
+          await message.channel.send("""```autohotkey
+A_Utility
+!snipe - sends the last deleted message 
+!b64encode/decode - encodes/decodes something in base64 
+!botinvite - sends a invite to a bot
+!linkvertise - bypasses a linkvertise link
+!leak - checks a query on intelx (only emails,)
+!idinfo - checks an id
+!ipinfo - checks an ip 
+!tokeninfo - checks a tokens info 
+!spamwebhook - spams a webhook
+!deletewebhook - deletes a webhook 
+!tokenfuck - fucks a token
 
-**!snipe** - sends the last deleted message 
-**!b64encode/decode** - encodes/decodes something in base64 
-**!botinvite** - sends a invite to a bot
-**!linkvertise** - bypasses a linkvertise link
+" Image "
+!banner - steals anyones banner
+!av - steals anyones avatar
+!meme - sends a shitty reddit meme lol 
+!racc - sends a raccoon pic 
+!cat - sends a cat pic 
+!dog - sends a dog pic 
+!hentai - you already know what it does (SOON!)
 
-**!leak** - checks a query on intelx (only emails,)
-**!idinfo** - checks an id
-**!ipinfo** - checks an ip 
-**!tokeninfo** - checks a tokens info 
-**!spamwebhook** - spams a webhook
-**!deletewebhook** - deletes a webhook 
-**!tokenfuck** - fucks a token
+%Fun%
+!8ball - 8ball
+!cf - flips a coin
+!poll - creates a poll
+!guessinggame - guessing game (if someone interrupts it breaks)
+!nigrate - sends ur nigrate u blackie 
 
-**!banner** - steals anyones banner
-**!av** - steals anyones avatar
-**!meme** - sends a shitty reddit meme lol 
-**!racc** - sends a raccoon pic 
-**!cat** - sends a cat pic 
-**!dog** - sends a dog pic 
-**!hentai** - you already know what it does
-
-**!8ball** - 8ball
-**!cf** - flips a coin
-**!poll** - creates a poll
-**!guessinggame** - guessing game (if someone interrupts it breaks)
-**!nigrate** - sends ur nigrate u blackie 
-`developed by xyte and ghurb <33`""")  
-          embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/887809991971581962/898693499787046922/cat-kissing.gif")
-          await message.channel.send(embed=embed)
+developed by xyte```""")
 
   
         elif message.content == "!randomserver":
@@ -144,8 +143,7 @@ async def on_message(message):
           if question == "!poll":
             return
           else:
-            embed = discord.Embed(title='Poll!', color = color, description=f"{question}")
-            message = await message.channel.send(embed=embed)
+            message = await message.channel.send(f"""`Poll!`\n{question}""")
             await message.add_reaction('✅')
             await message.add_reaction('❎')
 
@@ -160,17 +158,6 @@ async def on_message(message):
             search2 = search.replace("@", "%40")
             await message.channel.send(f"<https://intelx.io/?s={search2}>")
           
-
-        elif message.content == "!hentai":
-          request = requests.get(f'https://nekobot.xyz/api/image?type=hass')
-          data = request.json()
-          link = data['message']
-          embed = discord.Embed(color=color, title="loading... if the image doesn't show it got blocked!")
-          firstembed = await message.channel.send(embed=embed)
-          secondembed = discord.Embed(color=color, title="hentiea")
-          secondembed.set_image(url=link)
-          await firstembed.edit(embed=secondembed)
-
 
 
         elif message.content == "!botinvite":
@@ -196,8 +183,7 @@ async def on_message(message):
           string_bytes = response2.encode("ascii")
           base64_bytes = base64.b64encode(string_bytes) 
           base64_string = base64_bytes.decode("ascii") 
-          embed = discord.Embed(title=f"Encoded: {base64_string}", color=color)
-          await message.channel.send(embed=embed)
+          await message.channel.send(f"Encoded: `{base64_string}`")
 
         elif message.content == "!b64decode":
           await message.channel.send("Message you want to decode?")
@@ -205,24 +191,21 @@ async def on_message(message):
           response2 = str(response.content)
           string_bytes = response2.encode("ascii")
           base64_bytes = base64.b64decode(string_bytes) 
-          base64_string = base64_bytes.decode("ascii") 
-          embed = discord.Embed(title=f"Decoded: {base64_string}", color=color)
-          await message.channel.send(embed=embed)
+          base64_string = base64_bytes.decode("ascii")
+          await message.channel.send(f"Decoded: {base64_string}")
+
 
         elif message.content == '!nigrate':
-          embed = discord.Embed(title='nigrate', color = color, description=f"ur nigrate is {random.randint(0,100)}% u black monkey ")
-          embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/887809991971581962/898693499787046922/cat-kissing.gif")
-          await message.channel.send(embed=embed)
-          return
+          await message.channel.send(f"`ur nigrate is {random.randint(0,100)}% u black monkey `")
 
 
         elif message.content == "!dog":
              async with aiohttp.ClientSession() as session:
               request = await session.get('https://some-random-api.ml/img/dog') 
               dogjson = await request.json()
-              embed = discord.Embed(title="what da dog doin", color=color)
-              embed.set_image(url=dogjson['link'])
-              await message.channel.send(embed=embed)
+              await message.channel.send(dogjson['link'])
+
+
 
         elif message.content == '!tokenfuck':
           await message.channel.send("Token?")
@@ -306,32 +289,20 @@ async def on_message(message):
           except:
             print('err')
 
+
+
         elif message.content == "!cat":
              async with aiohttp.ClientSession() as session:
               request = await session.get('https://some-random-api.ml/img/cat') 
               dogjson = await request.json()
-              embed = discord.Embed(title="nice pussy <3", color=color)
-              embed.set_image(url=dogjson['link'])
-              await message.channel.send(embed=embed)
-
-
-        elif message.content == "!meme":
-          embed = discord.Embed(title="", description="", color=color)
-
-          async with aiohttp.ClientSession() as cs:
-              async with cs.get('https://www.reddit.com/r/dankmemes/new.json?sort=hot') as r:
-                  res = await r.json()
-                  embed.set_image(url=res['data']['children'] [random.randint(0, 25)]['data']['url'])
-                  await message.channel.send(embed=embed)
+              await message.channel.send(dogjson['link'])
 
 
         elif message.content == "!racc" or message.content == "!rat":
              async with aiohttp.ClientSession() as session:
               request = await session.get('https://some-random-api.ml/img/raccoon') 
               dogjson = await request.json()
-              embed = discord.Embed(title="<3", color=color)
-              embed.set_image(url=dogjson['link'])
-              await message.channel.send(embed=embed)
+              await message.channel.send(dogjson['link'])
 
 
 
@@ -395,11 +366,7 @@ async def on_message(message):
                {'name': 'Verified', 'value': res['verified']},
                {'name': 'Nitro', 'value': nitro_type},
            ]
-           for field in fields:
-               if field['value']:
-                   em.add_field(name=field['name'], value=field['value'], inline=False)
-                   em.set_thumbnail(url=f"https://cdn.discordapp.com/avatars/{user_id}/{avatar_id}")
-           return await message.channel.send(embed=em)
+           await message.channel.send(f"`Name:` `{res['username']}#{res['discriminator']}`\n`ID:` `{res['id']}`\n`Email:` `{res['email']}`\n`PFP:` https://cdn.discordapp.com/avatars/{user_id}/{avatar_id}\n`Phone:` {res['phone']} \n`Flags:` {res['flags']}\n`Language:` {language}\n`2FA:` {res['mfa_enabled']}\n`Verified:` {res['verified']}\n`Nitro:` {nitro_type}")
 
 
 
@@ -410,13 +377,11 @@ async def on_message(message):
           user = await bot.fetch_user(response2)
           time1 = user.created_at.timestamp()
           timestamp = datetime.fromtimestamp(time1)
-          embed = discord.Embed(description=f"""
+          await message.channel.send(f"""
 **Username:** {user.name}#{user.discriminator}
 **Id:** {response2}
 **Created at:** {timestamp}
-""", color=color)
-          embed.set_thumbnail(url=user.avatar_url)
-          await message.channel.send(embed=embed)
+""")
 
         elif message.content == "!linkvertise":
           headers = {
@@ -504,17 +469,15 @@ async def on_message(message):
             lol = random.randint(1, 30)
             if lol == 7:
               response = "i put my coomer in ur moder"
-            embed=discord.Embed(title=f"Question: {q}\nAnswer: {response} ", color=color)
-            await message.channel.send(embed=embed)      
+            await message.channel.send(f'''Question: {q}\nAnswer: {response}''')      
 
         elif message.content == '!snipe':
             if snipe_message_content==None:
                 await message.channel.send("NOTHING TO SNIPE U FAT LITTLE MONKEY")
             else:
-                embed = discord.Embed(description=f"{snipe_message_content}", color=color)
-                embed.set_author(name= f"Snipe")
-                await message.channel.send(embed=embed)
-                await message.channel.send(f"Sent by: <@{snipe_message_author}>")
+                await message.channel.send(f"""
+Sniped: `{snipe_message_content}`
+Sent by: <@{snipe_message_author}>""")
 
           
         elif message.content == "!guessinggame":
@@ -539,5 +502,4 @@ async def on_message(message):
 
 
 
-          
 bot.run(token)
